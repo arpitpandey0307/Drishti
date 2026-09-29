@@ -20,11 +20,12 @@ function dec(s) {
 async function load() {
   const j = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.json(); });
   const t = u => fetch(u).then(r => r.text());
-  const [grid, net, fc, twin, scen, val, roads, blocks, bnd, bld] = await Promise.all([
-    j("data/grid.json"), j("data/network.json"), j("data/forecast.json"), j("data/twin.json"),
+  const [grid, net, idx, twin, scen, val, roads, blocks, bnd, bld] = await Promise.all([
+    j("data/grid.json"), j("data/network.json"), j("data/forecast_index.json"), j("data/twin.json"),
     j("data/scenarios.json"), j("data/validation.json"), j("../data/roads.geojson"),
     t("../data/blocks_centroids.csv"), j("../kiet_terrain/campus_osm.geojson"), j("../data/campus_accurate.geojson")]);
-  D = { grid, net, fc, twin, scen, val, roads, bnd, bld };
+  D = { grid, net, idx, twin, scen, val, roads, bnd, bld, cycles: {} };
+  await loadCycle(idx.default);
   D.blocks = blocks.trim().split(/\r?\n/).slice(1).map(l => { const c = l.split(","); return { name: c[0], lat: +c[1], lon: +c[2], floors: c[3] }; });
   G = { ny: grid.ny, nx: grid.nx, n: grid.ny * grid.nx, s: grid.bounds[0][0], w: grid.bounds[0][1], nn: grid.bounds[1][0], e: grid.bounds[1][1],
     off: grid.crop_offset || [11, 28] };
@@ -34,6 +35,10 @@ async function load() {
   G.wet = new Uint8Array(G.n); for (let k = 0; k < G.n; k++) G.wet[k] = G.dom[k] && !G.bld[k] ? 1 : 0;
   G.nwet = G.wet.reduce((a, b) => a + b, 0);
   let amax = 0; for (let k = 0; k < G.n; k++) if (G.wet[k]) amax = Math.max(amax, G.acc[k]); G.accMax = amax;
+}
+async function loadCycle(t0) {
+  if (!D.cycles[t0]) D.cycles[t0] = await fetch(`data/forecast_${t0}.json`).then(r => r.json());
+  D.fc = D.cycles[t0];
 }
 const FC = () => D.fc[S.mode];
 const F = () => FC().forecast;
@@ -123,7 +128,7 @@ function hotspotBounds(h) {
   const i0 = h.i0 - G.off[0], i1 = h.i1 - G.off[0], j0 = h.j0 - G.off[1], j1 = h.j1 - G.off[1];
   return [[G.nn - i1 * G.dlat, G.w + j0 * G.dlon], [G.nn - i0 * G.dlat, G.w + j1 * G.dlon]];
 }
-const K0 = () => D.net.live.t0_index;
+const K0 = () => Math.round(D.fc.t0_min / 5) - 1;
 function healthCard() {
   const f = F(), q = f.quality, g = q.gauge_counts, tw = D.twin;
   const valid = g.VALID, tot = Object.values(g).reduce((a, b) => a + b, 0);
@@ -146,7 +151,10 @@ function domainSpread() {
   return n ? s / n : 0;
 }
 function vehicleThr(v) {
-  return { "two-wheeler": [0.07, 0.15], car: [0.10, 0.30], ambulance: [0.15, 0.35], bus: [0.25, 0.45], "fire truck": [0.35, 0.60] }[v];
+  const base = { "two-wheeler": [0.07, 0.15], car: [0.10, 0.30], ambulance: [0.15, 0.35], bus: [0.25, 0.45], "fire truck": [0.35, 0.60] }[v];
+  if (!S.emergency) return base;
+  // emergency policy: emergency vehicles may use deeper water, public traffic is restricted earlier
+  return ["ambulance", "fire truck"].includes(v) ? [base[0] + 0.05, base[1] + 0.10] : [base[0] - 0.03, base[1] - 0.10];
 }
 function roadStatus(depthM, v) {
   const [deg, imp] = vehicleThr(v);
@@ -412,7 +420,8 @@ VIEWS.impact = () => {
   P.innerHTML = `
   <div class="card"><h3>Dynamic road impact ${tag("modelled")}</h3>
     <div class="row"><span class="muted small">Vehicle</span><select id="veh">${["two-wheeler", "car", "ambulance", "bus", "fire truck"].map(v => `<option ${v === S.vehicle ? "selected" : ""}>${v}</option>`).join("")}</select>
-    <span class="small muted">thresholds ${vehicleThr(S.vehicle).map(x => x * 100 + " cm").join(" / ")}</span></div>
+    <span class="small muted">thresholds ${vehicleThr(S.vehicle).map(x => Math.round(x * 100) + " cm").join(" / ")}</span>
+    <label class="toggle small"><input type="checkbox" id="emerg" ${S.emergency ? "checked" : ""}/> Emergency operations policy</label></div>
     <div class="kpis" id="roadKpi"></div><table id="roadTbl" style="margin-top:8px"></table></div>
   <div class="card"><h3>Flood-aware time-dependent routing ${tag("modelled")}</h3>
     <div class="row"><button class="btn sm ghost" id="pickO">${S.route.origin ? "✓ Origin set" : "Set origin on map"}</button><button class="btn sm ghost" id="pickD">${S.route.dest ? "✓ Destination set" : "Set destination on map"}</button></div>
@@ -422,7 +431,8 @@ VIEWS.impact = () => {
     <button class="btn sm" id="goRoute">Find 3 routes</button></div>
     <div id="routeOut"></div></div>
   <div class="card"><h3>Critical infrastructure access ${tag("modelled")}</h3><table id="critTbl"></table></div>`;
-  $("#veh").onchange = e => { S.vehicle = e.target.value; VIEWS.impact(); };
+  $("#veh").onchange = e => { S.vehicle = e.target.value; go("impact"); };
+  $("#emerg").onchange = e => { S.emergency = e.target.checked; audit("emergency policy " + (S.emergency ? "activated" : "deactivated")); go("impact"); };
   $("#pickO").onclick = () => { S.route.picking = "origin"; toast("Click the map to set the origin"); };
   $("#pickD").onclick = () => { S.route.picking = "dest"; toast("Click the map to set the destination"); };
   $("#fromB").onchange = e => { const b = D.blocks[+e.target.value]; if (b) { S.route.origin = nearestWet(b.lat, b.lon); S.route.results = []; go("impact"); } };
@@ -453,14 +463,15 @@ VIEWS.impact = () => {
   // critical infrastructure (Module R)
   const ttt = dec(FC().ttt_min), pr = dec(FC().p_reach);
   const crit = D.blocks.map(b => {
-    const c = cellOfLL(b.lat, b.lon); let t = 255, p = 0;
+    const c = cellOfLL(b.lat, b.lon); let t = 255, p = 0, tMax = 0, dry = false;
     if (c) for (let di = -6; di <= 6; di++) for (let dj = -6; dj <= 6; dj++) {
       const i = c.i + di, j = c.j + dj; if (i < 0 || j < 0 || i >= G.ny || j >= G.nx) continue; const k = i * G.nx + j;
       if (!G.wet[k] || Math.hypot(di, dj) * 5 > 30) continue; t = Math.min(t, ttt[k]); p = Math.max(p, pr[k] / 100);
+      if (ttt[k] === 255 || pr[k] < 30) dry = true; else tMax = Math.max(tMax, ttt[k]);
     }
-    return { b, t, p };
+    return { b, t, p, alt: dry ? "throughout 3 h" : `until +${tMax} min` };
   }).sort((a, b) => a.t - b.t);
-  $("#critTbl").innerHTML = `<tr><th>Facility</th><th>Access risk</th><th class="num">P(reach 10 cm)</th></tr>` + crit.map(c => `<tr><td>${c.b.name} block <span class="muted small">${c.b.floors}</span></td><td>${c.t < 255 && c.p >= 0.3 ? `<span class="st High">at risk in ${c.t} min</span>` : '<span class="st OK">accessible</span>'}</td><td class="num">${pct(c.p)}</td></tr>`).join("");
+  $("#critTbl").innerHTML = `<tr><th>Facility</th><th>Access risk</th><th>Alternative access</th><th class="num">P(10 cm)</th></tr>` + crit.map(c => `<tr><td>${c.b.name} block <span class="muted small">${c.b.floors}</span></td><td>${c.t < 255 && c.p >= 0.3 ? `<span class="st High">first route cut in ${c.t} min</span>` : '<span class="st OK">accessible</span>'}</td><td class="small">${c.t < 255 && c.p >= 0.3 ? c.alt : "–"}</td><td class="num">${pct(c.p)}</td></tr>`).join("");
   crit.forEach(c => L.circleMarker([c.b.lat, c.b.lon], { radius: 6, color: "#fff", weight: 1.5, fillColor: c.t < 255 && c.p >= .3 ? "#f07b2f" : "#2fbf71", fillOpacity: 1 }).bindTooltip(`${c.b.name} block`).addTo(viewLayer));
 };
 
@@ -587,7 +598,7 @@ VIEWS.actions = () => {
 function confirmRole(allowed) { if (allowed.includes(S.role)) return true; toast(`${S.role} cannot approve actions`); audit("approval denied", S.role); return false; }
 
 VIEWS.valid = () => {
-  const P = $("#panel"), v = D.val.verification, sm = D.val.surrogate, b = D.scen.baselines, tw = D.twin;
+  const P = $("#panel"), v = (D.val.by_cycle || {})[D.fc.t0_min] || D.val.verification, sm = D.val.surrogate, b = D.scen.baselines, tw = D.twin;
   const fl = Object.fromEntries(v.flood.map(r => [r.lead_min, r]));
   P.innerHTML = `
   <div class="card"><h3>Baseline experiments (SRS §7) ${tag("modelled")}</h3>
@@ -675,7 +686,12 @@ function refreshHeader() {
   p.textContent = `${h.status} · rain: ${h.rain_source_mode}`;
   const bn = $("#banner"); bn.classList.toggle("hidden", !h.degraded);
   bn.innerHTML = h.degraded ? `⚠ DEGRADED FORECAST — ${h.reasons.join(" · ")} · uncertainty ×${h.uncertainty_inflation}` : "";
-  $("#clock").textContent = `T+${D.fc.t0_min} min`;
+  const hc = healthCard();
+  const mh = $("#miniHealth"); mh.className = "mini" + (h.degraded ? " bad" : "");
+  mh.innerHTML = `<b>Forecast health</b> <span class="st ${h.status}">${h.status}</span>
+    <div class="r"><span>Rain source</span><span>${h.rain_source_mode}</span></div><div class="r"><span>Gauges valid</span><span>${hc.gauges_valid}</span></div>
+    <div class="r"><span>Sensors</span><span>${hc.sensor_health.split(" ")[0]}</span></div><div class="r"><span>Uncertainty</span><span>${hc.uncertainty}${h.uncertainty_inflation > 1 ? " ×" + h.uncertainty_inflation : ""}</span></div>
+    <div class="r"><span>Issued</span><span>T+${D.fc.t0_min} · ${fmt(F().timings_s.total, 0)} s run</span></div>`;
   document.querySelectorAll("#nav button").forEach(b => b.classList.toggle("locked", !ROLES[S.role].split(" ").includes(b.dataset.view)));
 }
 async function init() {
@@ -696,6 +712,9 @@ async function init() {
     else if (S.view === "live" || S.view === "prob") { S.sel = c; go("forecast"); cellPanel(c); }
   });
   document.querySelectorAll("#nav button").forEach(b => b.onclick = () => go(b.dataset.view));
+  $("#miniHealth").onclick = () => go("live");
+  const cy = $("#cycle"); cy.innerHTML = D.idx.cycles.map(t => `<option value="${t}" ${t === D.idx.default ? "selected" : ""}>T+${t} min</option>`).join("");
+  cy.onchange = async e => { await loadCycle(+e.target.value); S.route.results = []; S.sel = null; audit("replay cycle", "T+" + e.target.value); refreshHeader(); go(S.view); };
   $("#degradeToggle").onchange = e => { S.mode = e.target.checked ? "degraded" : "ok"; audit(e.target.checked ? "radar outage drill started" : "radar outage drill ended"); refreshHeader(); go(S.view); };
   $("#role").onchange = e => { S.role = e.target.value; audit("role switched", S.role); refreshHeader(); if (!ROLES[S.role].split(" ").includes(S.view)) go("live"); else go(S.view); };
   audit("session started", "forecast " + F().forecast_id);

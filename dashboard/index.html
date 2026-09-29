@@ -13,7 +13,7 @@
 <header>
   <div class="brand"><span class="logo">◉</span><div><b>Drishti</b><small>Urban Flood Digital Twin · KIET Ghaziabad</small></div></div>
   <div id="healthPill" class="pill">…</div>
-  <div class="clock"><small>Event replay</small><b id="clock">T+115 min</b></div>
+  <div class="clock"><small>Forecast issued</small><select id="cycle" title="Historical replay: forecast issue time"></select></div>
   <label class="toggle" title="Replay the same cycle with the radar feed lost and gauge G3 frozen"><input type="checkbox" id="degradeToggle"/> Radar outage drill</label>
   <select id="role" title="Operator role (RBAC)">
     <option>Flood Control Operator</option><option>System Administrator</option><option>Emergency Dispatcher</option>
@@ -35,6 +35,7 @@
   </nav>
   <main>
     <div id="map"></div>
+    <div id="miniHealth" class="mini" title="Forecast health card — click for details"></div>
     <div id="mapbar">
       <div id="timebar" class="timebar">
         <button id="play" class="icon" title="Play">▶</button>

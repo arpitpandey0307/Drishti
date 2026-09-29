@@ -26,6 +26,7 @@ from forecast.surrogate.features import CROP
 OUT = os.path.join("dashboard", "data")
 EVENT = dict(seed=3, kind="squall")
 T0 = 115.0
+CYCLES = [90.0, 115.0, 140.0]      # forecast issue times replayed in the dashboard
 T_END = 300.0                       # simulate 0-300 min
 _W = {}
 
@@ -107,12 +108,14 @@ def main():
 
     # ------------------------------------------------------------------ forecast cycles (Task 2)
     src = ForecastSources(radar=SyntheticRadar(ev, grid), gauges=SyntheticGauges(ev), nwp=SyntheticNWP(ev), truth=ev)
-    fc = run_forecast(T0, src, members=20, seed=3, ctx=ctx, save=False)
     src_d = ForecastSources(radar=SyntheticRadar(ev, grid, outages=[(80, 999)]),
                             gauges=SyntheticGauges(ev, faults={"G3": ("frozen", 60)}), nwp=SyntheticNWP(ev), truth=ev)
-    fd = run_forecast(T0, src_d, members=20, seed=3, ctx=ctx, save=False, refine=False)
-    print("forecasts done", round(time.time() - t_all), "s", flush=True)
-
+    cycles = {}
+    for t0 in CYCLES:
+        cycles[t0] = (run_forecast(t0, src, members=20, seed=3, ctx=ctx, save=False),
+                      run_forecast(t0, src_d, members=20, seed=3, ctx=ctx, save=False, refine=False))
+        print("forecast cycle", t0, "done", round(time.time() - t_all), "s", flush=True)
+    fc = cycles[T0][0]
     wet = ctx.wet
     k0 = int(T0 / step) - 1
     # ------------------------------------------------------------------ grid.json
@@ -186,11 +189,15 @@ def main():
                       "p50": [b64(sub(x), 2) for x in rq[1]], "p90": [b64(sub(x), 2) for x in rq[2]]},
         }
 
-    fcj = {"t0_min": T0, "ok": pack_fc(fc), "degraded": pack_fc(fd)}
-    # per-member cell depths for tooltips (uint8 cm on crop)
-    fcj["ok"]["members_cm"] = [[b64(crop(fc["depth_members"][m, l]), 100) for l in range(len(LEAD_MIN))]
-                               for m in range(0, 20, 2)]
-    json.dump(fcj, open(os.path.join(OUT, "forecast.json"), "w"), default=_j)
+    for t0, (fo, fdg) in cycles.items():
+        fcj = {"t0_min": t0, "ok": pack_fc(fo), "degraded": pack_fc(fdg)}
+        # per-member cell depths for the location chart (uint8 cm on crop)
+        fcj["ok"]["members_cm"] = [[b64(crop(fo["depth_members"][m, l]), 100) for l in range(len(LEAD_MIN))]
+                                   for m in range(0, 20, 4)]
+        json.dump(fcj, open(os.path.join(OUT, f"forecast_{int(t0)}.json"), "w"), default=_j)
+    json.dump({"cycles": [int(t) for t in CYCLES], "default": int(T0)}, open(os.path.join(OUT, "forecast_index.json"), "w"))
+    if os.path.exists(os.path.join(OUT, "forecast.json")):
+        os.remove(os.path.join(OUT, "forecast.json"))
 
     # ------------------------------------------------------------------ twin experiment (Task 3)
     truth = runs["twin_truth"]
@@ -304,9 +311,10 @@ def main():
 
     # ------------------------------------------------------------------ verification (Task 2 / 5)
     from forecast.verify import verify
-    v = verify(T0, src, fc, ctx)
+    by_cycle = {int(t0): verify(t0, src, fo, ctx) for t0, (fo, _) in cycles.items()}
+    v = by_cycle[int(T0)]
     meta = json.load(open("forecast/models/surrogate_v2.json"))
-    json.dump({"verification": v, "surrogate": {"metrics": meta["metrics"], "arch": meta["arch"],
+    json.dump({"verification": v, "by_cycle": by_cycle, "surrogate": {"metrics": meta["metrics"], "arch": meta["arch"],
                                                 "params": meta["params"], "training": {k: meta["training"][k]
                                                                                        for k in ("epochs", "train_windows", "wall_s")}},
                "generated_s": round(time.time() - t_all, 1)},

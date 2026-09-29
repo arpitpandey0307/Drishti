@@ -1,3 +1,10 @@
+import os
+
+import pytest
+
+
+@pytest.mark.skipif(not os.path.exists("/tmp/space/drishti.onnx"),
+                    reason="needs the HF Space bundle in /tmp/space (see space/README.md)")
 def test_nowcast_route_local_files():
     # file://-style base: serve /tmp/space layout from a local copy (no network)
     import os

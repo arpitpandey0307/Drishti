@@ -26,7 +26,10 @@ number comes from real model runs, exported by `tools/export_dashboard.py`:
 | G | Validation | Y, Z, §7 | B1–B7 table, surrogate skill vs persistence, forecast verification, provenance record |
 | H | System & API | §12–§18 | processing loop timings, `/api/v1/*` response explorer, CAP 1.2 / GeoJSON / SensorThings export, RBAC matrix, audit log |
 
-The header has the **radar outage drill** (it switches to the real degraded forecast and shows
+The header also has a **forecast issue-time selector** for historical replay: cycles at
+T+90 (before the squall), T+115 and T+140 min, each verified against the synthetic truth in
+view G. The **forecast health card** stays on the map in every view. Also in the header: the
+**radar outage drill** (it switches to the real degraded forecast and shows
 the DEGRADED banner) and a role selector that locks views per role.
 
 ## What is live vs pre-computed
@@ -37,5 +40,5 @@ the DEGRADED banner) and a role selector that locks views per role.
   - sensor placement: greedy selection on forecast spread
   - the WHY? factors
   - the CAP alert, the exports and the audit log
-- **Pre-computed by the exporter:** everything that needs the physics or the ensemble. The dashboard replays one forecast cycle (T+115 min). It does not run a 5-minute server loop.
+- **Pre-computed by the exporter:** everything that needs the physics or the ensemble. The dashboard replays three forecast cycles. It does not run a 5-minute server loop.
 - **Not built yet:** the FastAPI server, database and authentication (Task 5 backend) and a full EnKF (Task 3). The API explorer shows the response each endpoint will return, taken from the bundle.

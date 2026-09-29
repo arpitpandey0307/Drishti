@@ -66,3 +66,7 @@ img.leaflet-image-layer{image-rendering:pixelated}
 .hs-label{background:rgba(239,68,82,.9);color:#fff;border-radius:6px;padding:1px 6px;font-weight:700;font-size:11px;white-space:nowrap}
 @media(max-width:1000px){nav{width:58px}nav button{font-size:0}nav button i{font-size:11px}aside{width:330px}}
 @media(max-width:720px){.shell{flex-direction:column}nav{width:auto;flex-direction:row;overflow-x:auto}main{height:52vh;flex:none}aside{width:auto}}
+.mini{position:absolute;top:12px;right:12px;z-index:600;background:rgba(10,19,32,.93);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:11px;min-width:190px;cursor:pointer}
+.mini b{font-size:12px}.mini .r{display:flex;justify-content:space-between;gap:10px;color:var(--mut)}.mini .r span:last-child{color:var(--ink)}
+.mini.bad{border-color:var(--danger)}
+#cycle{padding:2px 6px;font-weight:700}
