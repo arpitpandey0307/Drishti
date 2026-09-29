@@ -35,6 +35,7 @@ python -m http.server 8123
 
 | Page | Purpose |
 |---|---|
+| `dashboard/` | **Operator dashboard (all 5 tasks)** — live twin, probabilistic forecast, hotspots, drainage health + assimilation, road impact + routing, what-if/actions, validation, API/CAP/RBAC ([docs](docs/dashboard.md)) |
 | `index.html` | Landing page |
 | `flood_planner.html` | Nowcast depth map (0–180 min) + flood-safe routing |
 | `flood_viewer.html` | Animated simulation: rain → runoff → drainage → surcharge → flooding |

@@ -54,7 +54,8 @@ def simulate(twin, network, spec, hydro_cfg, rain_cfg, out_every=1,
     """Run one scenario. Optional overrides (dataset v1.0 uncertainty, recorded in spec):
     dem / manning grids, inlet_cap_scale, dep_scale. `imperv_open` is metadata only.
     spec keys: seed, temporal, spatial, duration_h, total_mm, blockage_level, blockage_mode,
-    optional recession_h, boundary {type,...}, pump_status {edge_id: auto|on|off|failed}.
+    optional recession_h, boundary {type,...}, pump_status {edge_id: auto|on|off|failed},
+    blockage_edges {edge_id: level} (targeted blockage on top of blockage_level).
     `rain` (nt, ny, nx) mm per output step replaces the spec-generated storm (used by the
     forecast engine to run observed / nowcast rainfall); temporal/spatial/total_mm are then ignored.
     """
@@ -96,6 +97,8 @@ def simulate(twin, network, spec, hydro_cfg, rain_cfg, out_every=1,
     net_local = dict(network, nodes=nodes)
     blk = apply_blockage(len(network["edges"]), network["edges"], network["nodes"],
                          spec.get("blockage_level", 0.0), spec.get("blockage_mode", "pipe_uniform"), rng)
+    for e, lvl in (spec.get("blockage_edges") or {}).items():   # targeted blockage {edge_id: level}
+        blk[int(e)] = float(lvl)
     bnds = for_outfalls(network, dcfg.get("boundaries"), spec.get("boundary"))
     dr = Drainage1D(net_local, bnds, blockage=blk, pump_status=spec.get("pump_status"),
                     inlet_cap_scale=inlet_cap_scale)

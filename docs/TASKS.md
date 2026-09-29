@@ -10,9 +10,9 @@ simulated sensors. Every output must be labelled *observed / derived / modelled 
 |---|---|---|---|---|
 | 1 | Physics core: coupled 1D/2D twin — **DONE** ([details](simulation.md)) | D, E, F, G, H, I | AC-02 … AC-06 | 5–6 person-weeks (pw) |
 | 2 | Rainfall nowcast + probabilistic flood forecast — **DONE** ([details](forecast.md)) | A, B, C, M, N | AC-01, AC-07, AC-08, AC-12, AC-19 | 5–6 pw |
-| 3 | Closed loop: data assimilation + drainage health | J, K, L, U, V | AC-09, AC-10, AC-11 | 5–6 pw |
-| 4 | Decisions: impact, routing, what-if, actions, sensors | O, P, Q, R, S, T, X | AC-13, AC-14, AC-15, AC-20 | 5–6 pw |
-| 5 | Platform: API, dashboard, validation, security | W, Y, Z, §12–§24 | AC-16, AC-17, AC-18 | 6–7 pw |
+| 3 | Closed loop: data assimilation + drainage health — **dashboard view D done**, demo-level backend in `tools/export_dashboard.py` | J, K, L, U, V | AC-09, AC-10, AC-11 | 5–6 pw |
+| 4 | Decisions: impact, routing, what-if, actions, sensors — **dashboard views E/F done** (physics what-ifs, in-browser routing) | O, P, Q, R, S, T, X | AC-13, AC-14, AC-15, AC-20 | 5–6 pw |
+| 5 | Platform: API, dashboard, validation, security — **dashboard done** ([details](dashboard.md)); FastAPI/DB/auth server pending | W, Y, Z, §12–§24 | AC-16, AC-17, AC-18 | 6–7 pw |
 
 Total: about 27–32 person-weeks, which is roughly 6 weeks full-time for a 5–6 person team.
 
