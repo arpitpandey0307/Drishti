@@ -8,7 +8,7 @@ simulated sensors. Every output must be labelled *observed / derived / modelled 
 
 | # | Task | SRS modules | Acceptance criteria | Effort |
 |---|---|---|---|---|
-| 1 | Physics core: coupled 1D/2D twin | D, E, F, G, H, I | AC-02 … AC-06 | 5–6 person-weeks (pw) |
+| 1 | Physics core: coupled 1D/2D twin — **DONE** ([details](simulation.md)) | D, E, F, G, H, I | AC-02 … AC-06 | 5–6 person-weeks (pw) |
 | 2 | Rainfall nowcast + probabilistic flood forecast | A, B, C, M, N | AC-01, AC-07, AC-08, AC-12, AC-19 | 5–6 pw |
 | 3 | Closed loop: data assimilation + drainage health | J, K, L, U, V | AC-09, AC-10, AC-11 | 5–6 pw |
 | 4 | Decisions: impact, routing, what-if, actions, sensors | O, P, Q, R, S, T, X | AC-13, AC-14, AC-15, AC-20 | 5–6 pw |
@@ -18,7 +18,11 @@ Total: about 27–32 person-weeks, which is roughly 6 weeks full-time for a 5–
 
 ---
 
-## Task 1 — Physics Core: Coupled 1D/2D Digital Twin
+## Task 1 — Physics Core: Coupled 1D/2D Digital Twin ✅ DONE
+
+> Implemented as an in-house NumPy local-inertial 1D engine instead of PySWMM (no SWMM
+> binaries for Python 3.14); networks export to SWMM `.inp` for cross-checking.
+> See [`simulation.md`](simulation.md).
 
 **Goal:** a correct, mass-conserving model in which rainfall becomes runoff, flows over the
 DEM, enters a real hydraulic drainage network, surcharges and flows back onto the street.

@@ -13,11 +13,11 @@ def check_surface(res, twin, tol=0.05):
 
 def check_mass(res, tol=0.35):
     m = res["mass"]
-    lhs = m["rain_mm"]
+    lhs = m["rain_mm"] + m.get("boundary_in_mm", 0)
     # capture (drain_mm) splits into node storage + outfall discharge;
     # use discharged + stored (conservative quantities), not capture.
-    rhs = (m["infil_mm"] + m.get("depression_mm", 0) + m.get("discharged_mm", 0)
-           + m.get("node_stored_mm", 0) + m["ponded_mm"])
+    rhs = (m["infil_mm"] + m.get("interception_mm", 0) + m.get("depression_mm", 0)
+           + m.get("discharged_mm", 0) + m.get("node_stored_mm", 0) + m["ponded_mm"])
     err = abs(lhs - rhs) / max(lhs, 1e-6)
     return err, err <= tol
 

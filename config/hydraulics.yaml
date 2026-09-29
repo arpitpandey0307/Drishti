@@ -18,7 +18,13 @@ infiltration:
     open: 78
     building: 98
   depression_mm: {road: 1.0, open: 2.5, building: 0.0}
+  interception_mm: {road: 0.0, open: 1.0, building: 0.0}
 pipes:
   surcharge_head_m: 0.0              # head above rim => overflow
   inlet_weir_c: 1.7
+exchange:                            # surface <-> drainage (Module H), HEC-22 grate inlet
+  weir_coeff: 1.7
+  grate_perimeter_m: 2.0
+  orifice_coeff: 0.67
+  grate_area_m2: 0.1
 blockage_levels: [0.0, 0.10, 0.25, 0.50, 0.75, 0.90]

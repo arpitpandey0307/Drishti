@@ -1,5 +1,6 @@
 """Physics + graph + stability tests for the KIET flood simulator."""
-import yaml
+import pytest
+from simulation import config as C
 from simulation.terrain.twin import Twin
 from simulation.drainage.network import generate, pipe_capacity
 from simulation.hydraulics.simulate import simulate
@@ -8,10 +9,7 @@ from simulation.validation.checks import (
 from simulation.rainfall.generator import generate as gen_rain
 
 def _cfgs():
-    return (yaml.safe_load(open("config/terrain.yaml")),
-            yaml.safe_load(open("config/drainage.yaml")),
-            yaml.safe_load(open("config/rainfall.yaml")),
-            yaml.safe_load(open("config/hydraulics.yaml")))
+    return C.load("terrain"), C.load("drainage"), C.load("rainfall"), C.load("hydraulics")
 
 def _spec(**kw):
     s = {"seed": 7, "temporal": "peaked", "spatial": "uniform", "duration_h": 1.0,
@@ -54,7 +52,7 @@ def test_simulation_conserves_mass():
     net = generate(t, dra, seed=26085, variant=0)
     res = simulate(t, net, _spec(), hyd, rain)
     assert check_surface(res, t) == []
-    err, ok = check_mass(res)
+    err, ok = check_mass(res, tol=1e-6)
     assert ok, err
 
 def test_blockage_reduces_drainage():

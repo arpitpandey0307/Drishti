@@ -13,6 +13,7 @@ pipes:
   min_slope: 0.002
   max_slope: 0.05
   max_length_m: 120.0
+  design_intensity_mmh: 40.0   # Rational-method design storm (legacy under-design)
 nodes:
   rim_offset_m: 0.0         # rim = ground elevation
   depth_m: 1.5              # invert = ground - depth
@@ -27,3 +28,16 @@ uncertainty:                # sampled per scenario/network-variant
   inlet_capacity_range_m3s: [0.02, 0.10]
   slope_noise: 0.15
   position_jitter_m: 5.0
+# Outfall boundary conditions (Module I). Stages are metres above the outfall invert.
+# types: free | fixed_stage {stage_m} | timeseries {times_min, stages_m} | tidal {mean_m, amplitude_m, period_h, phase_h}
+boundaries:
+  default: {type: free}
+  outfalls: {}               # per-outfall override, keyed by node id
+# Pump station (Module G): storage sump + pump in front of the first outfall.
+pump_station:
+  enabled: true
+  capacity_m3s: 0.25
+  storage_area_m2: 60.0
+  sump_extra_depth_m: 1.0
+  on_depth_m: 0.8
+  off_depth_m: 0.3

@@ -19,11 +19,11 @@ def _blockage_for_edges(nE, level, mode, rng):
     return b
 
 def run(split="test", n=None, seed=None, out_dir="outputs/datasets", resume=True):
-    sim_cfg = yaml.safe_load(open("config/simulation.yaml"))
-    ter_cfg = yaml.safe_load(open("config/terrain.yaml"))
-    dra_cfg = yaml.safe_load(open("config/drainage.yaml"))
-    rain_cfg = yaml.safe_load(open("config/rainfall.yaml"))
-    hyd_cfg = yaml.safe_load(open("config/hydraulics.yaml"))
+    sim_cfg = yaml.safe_load(open("config/simulation.yaml", encoding="utf-8"))
+    ter_cfg = yaml.safe_load(open("config/terrain.yaml", encoding="utf-8"))
+    dra_cfg = yaml.safe_load(open("config/drainage.yaml", encoding="utf-8"))
+    rain_cfg = yaml.safe_load(open("config/rainfall.yaml", encoding="utf-8"))
+    hyd_cfg = yaml.safe_load(open("config/hydraulics.yaml", encoding="utf-8"))
     ds = sim_cfg["dataset"]
     n = n or ds.get(f"{split}_n", 10)
     seed = ds.get("seed", 26085) if seed is None else seed

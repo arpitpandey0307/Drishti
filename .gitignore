@@ -20,10 +20,10 @@ outputs/*
 *.tif
 kiet_terrain/data/
 # legacy experiment leftovers (not imported anywhere: terrain/, flood/, synthetic/, drainage/)
-terrain/
-flood/
-synthetic/
-drainage/
+/terrain/
+/flood/
+/synthetic/
+/drainage/
 # generated ML artefacts (weights on HF: Aman34243/drishti-flood-nowcaster)
 *.h5
 *.pt

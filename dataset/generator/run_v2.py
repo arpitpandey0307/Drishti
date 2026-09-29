@@ -33,10 +33,10 @@ def _init(cfg_paths):
     import yaml
     from simulation.terrain.twin import Twin
     from simulation.drainage.network import generate as gen_net
-    ter_cfg = yaml.safe_load(open(cfg_paths["terrain"]))
-    dra_cfg = yaml.safe_load(open(cfg_paths["drainage"]))
-    rain_cfg = yaml.safe_load(open(cfg_paths["rainfall"]))
-    hyd_cfg = yaml.safe_load(open(cfg_paths["hydraulics"]))
+    ter_cfg = yaml.safe_load(open(cfg_paths["terrain"], encoding="utf-8"))
+    dra_cfg = yaml.safe_load(open(cfg_paths["drainage"], encoding="utf-8"))
+    rain_cfg = yaml.safe_load(open(cfg_paths["rainfall"], encoding="utf-8"))
+    hyd_cfg = yaml.safe_load(open(cfg_paths["hydraulics"], encoding="utf-8"))
     twin = Twin(ter_cfg)
     nets = [gen_net(twin, dra_cfg, seed=cfg_paths["seed"], variant=v)
             for v in range(cfg_paths["nvar"])]
@@ -247,7 +247,7 @@ def run(prod_n=240, ood_n=36, seed=26085, out_dir="outputs/datasets",
         return handles[tag]
 
     # base twin for static grids (cheap, local)
-    ter_cfg = yaml.safe_load(open("config/terrain.yaml"))
+    ter_cfg = yaml.safe_load(open("config/terrain.yaml", encoding="utf-8"))
     base_twin = Twin(ter_cfg)
 
     from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -317,7 +317,7 @@ def run(prod_n=240, ood_n=36, seed=26085, out_dir="outputs/datasets",
     import numpy as _np
     from simulation.drainage.network import generate as gen_net
     import yaml as _yaml
-    dra_cfg = _yaml.safe_load(open("config/drainage.yaml"))
+    dra_cfg = _yaml.safe_load(open("config/drainage.yaml", encoding="utf-8"))
     nets = [gen_net(base_twin, dra_cfg, seed=seed, variant=v) for v in range(N_NETWORK_VARIANTS)]
     def _coerce(o):
         if isinstance(o, (_np.integer,)): return int(o)
