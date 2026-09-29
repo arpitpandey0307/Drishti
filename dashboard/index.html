@@ -3,43 +3,54 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Drishti Flood Operations</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<title>Drishti — Flood Operations</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<header>
-  <div class="brand"><span class="logo">◉</span><div><b>Drishti</b><small>Urban Flood Digital Twin · KIET Ghaziabad</small></div></div>
-  <div id="healthPill" class="pill">…</div>
-  <div class="clock"><small>Forecast issued</small><select id="cycle" title="Historical replay: forecast issue time"></select></div>
-  <label class="toggle" title="Replay the same cycle with the radar feed lost and gauge G3 frozen"><input type="checkbox" id="degradeToggle"/> Radar outage drill</label>
-  <select id="role" title="Operator role (RBAC)">
-    <option>Flood Control Operator</option><option>System Administrator</option><option>Emergency Dispatcher</option>
-    <option>Model Engineer</option><option>Infrastructure Engineer</option><option>Public Viewer</option>
-  </select>
-  <span class="tag syn" title="SRS §11 Level-1 demonstration: public DEM, synthetic drainage, simulated sensors">Level-1 demo data</span>
+<header class="top">
+  <a class="mark" href="../index.html" title="Back to home"><span class="serif">Drishti</span><span class="mono">flood operations · KIET</span></a>
+  <div class="hgroup">
+    <label class="field"><span>Forecast issued</span><select id="cycle"></select></label>
+    <div id="healthPill" class="state">—</div>
+    <label class="switch" title="Replay this cycle with the radar feed lost and gauge G3 frozen"><input type="checkbox" id="degradeToggle"/><i></i><span>Radar outage drill</span></label>
+  </div>
+  <div class="hgroup right">
+    <label class="field"><span>Role</span><select id="role">
+      <option>Flood Control Operator</option><option>System Administrator</option><option>Emergency Dispatcher</option>
+      <option>Model Engineer</option><option>Infrastructure Engineer</option><option>Public Viewer</option>
+    </select></label>
+    <span class="datatag" title="SRS §11 Level-1 demonstration: public DEM, synthetic drainage, simulated sensors">Level-1 data</span>
+  </div>
 </header>
 <div id="banner" class="banner hidden"></div>
 <div class="shell">
-  <nav id="nav">
-    <button data-view="live" class="on"><i>A</i>Live situation</button>
-    <button data-view="forecast"><i>B</i>Forecast</button>
-    <button data-view="prob"><i>C</i>Probability &amp; hotspots</button>
-    <button data-view="drain"><i>D</i>Drainage health &amp; twin</button>
-    <button data-view="impact"><i>E</i>Impact &amp; routing</button>
-    <button data-view="actions"><i>F</i>Action lab</button>
-    <button data-view="valid"><i>G</i>Validation</button>
-    <button data-view="system"><i>H</i>System &amp; API</button>
+  <nav id="nav" aria-label="Views">
+    <button data-view="live" class="on"><b>A</b><span>Situation</span></button>
+    <button data-view="forecast"><b>B</b><span>Forecast</span></button>
+    <button data-view="prob"><b>C</b><span>Hotspots</span></button>
+    <button data-view="drain"><b>D</b><span>Drainage</span></button>
+    <button data-view="impact"><b>E</b><span>Roads &amp; routes</span></button>
+    <button data-view="actions"><b>F</b><span>Action lab</span></button>
+    <button data-view="valid"><b>G</b><span>Validation</span></button>
+    <button data-view="system"><b>H</b><span>System</span></button>
   </nav>
   <main>
     <div id="map"></div>
-    <div id="miniHealth" class="mini" title="Forecast health card — click for details"></div>
+    <div class="maptools">
+      <button id="t3d" class="on" title="Toggle 3D water columns and tilt">3D</button>
+      <button id="tbase" title="Satellite / chart base map">Sat</button>
+      <button id="treset" title="Reset camera">⌖</button>
+    </div>
+    <div id="miniHealth" class="mini" title="Forecast health — click for the full card"></div>
+    <div class="viewtitle"><span id="vtLetter">A</span><div><b id="vtName">Situation</b><small id="vtSub"></small></div></div>
     <div id="mapbar">
-      <div id="timebar" class="timebar">
-        <button id="play" class="icon" title="Play">▶</button>
-        <input id="slider" type="range" min="0" max="10" value="0"/>
+      <div id="timebar" class="tape">
+        <button id="play" title="Play / pause">▶</button>
+        <div class="tapewrap"><input id="slider" type="range" min="0" max="10" value="0"/><div id="ticks" class="ticks"></div></div>
         <b id="sliderLab">–</b>
       </div>
       <div id="legend" class="legend"></div>
@@ -48,7 +59,7 @@
   <aside id="panel"></aside>
 </div>
 <div id="toast" class="toast hidden"></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="app.js"></script>
 </body>

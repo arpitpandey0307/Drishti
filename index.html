@@ -3,337 +3,137 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Drishti — Urban Flood Intelligence System</title>
-<meta name="description" content="Drishti predicts street-level flooding and safer routes. 0–3 hour urban flood nowcasting for streets, campuses and cities."/>
+<title>Drishti — street-level flood forecasting for KIET</title>
+<meta name="description" content="Drishti is a flood digital twin for the KIET campus, Ghaziabad: radar nowcasting, coupled drain and surface physics, and 0–180 minute street-level flood forecasts."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#04070f;
-    --navy:#071224;
-    --ink:#eaf1fb;
-    --mut:#9fb0c8;
-    --dim:#6b7d99;
-    --cyan:#5fd4ff;
-    --blue:#2f80ed;
-    --line:rgba(148,197,255,.16);
-    --glass:rgba(10,20,38,.52);
-    --glass-strong:rgba(10,22,42,.68);
-    --radius:16px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;background:var(--bg);color:var(--ink);
-    font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden;
-  }
-  /* ---------- video backdrop ---------- */
-  .bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:#04070f}
-  .bg video{
-    position:absolute;inset:0;width:100%;height:100%;
-    object-fit:cover;object-position:center;
-    filter:saturate(1.05) contrast(1.04);
-  }
-  .bg .poster{
-    position:absolute;inset:0;background:
-      url('https://images.pexels.com/photos/5195490/pexels-photo-5195490.jpeg?auto=compress&cs=tinysrgb&w=1920')
-      center/cover no-repeat;
-  }
-  .bg .shade{
-    position:absolute;inset:0;
-    background:
-      linear-gradient(180deg, rgba(3,7,17,.72) 0%, rgba(3,7,17,.42) 28%, rgba(3,7,17,.38) 52%, rgba(3,7,17,.82) 100%),
-      linear-gradient(90deg, rgba(3,7,17,.72) 0%, rgba(3,7,17,.30) 46%, rgba(3,7,17,.18) 100%),
-      radial-gradient(120% 70% at 50% 110%, rgba(47,128,237,.22), transparent 60%);
-  }
-  .bg .grain{
-    position:absolute;inset:0;opacity:.10;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
-  }
-  .bg .topline{position:absolute;top:0;left:0;right:0;height:2px;
-    background:linear-gradient(90deg,transparent,rgba(95,212,255,.7),rgba(47,128,237,.7),transparent);opacity:.7}
-
-  /* ---------- page frame ---------- */
-  .page{position:relative;z-index:2;min-height:100svh;display:flex;flex-direction:column}
-
-  /* top nav */
-  .nav{
-    display:flex;align-items:center;gap:14px;
-    padding:14px 28px;
-  }
-  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
-  .mark{
-    width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
-    background:linear-gradient(135deg,rgba(95,212,255,.22),rgba(47,128,237,.22));
-    border:1px solid var(--line);
-    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-    font-weight:700;font-family:"Space Grotesk",Inter,sans-serif;letter-spacing:.02em;
-    color:var(--cyan);font-size:15px;
-    box-shadow:0 4px 24px rgba(47,128,237,.25);
-  }
-  .brand b{font-family:"Space Grotesk",Inter,sans-serif;font-size:15px;letter-spacing:.22em}
-  .brand small{display:block;font-size:10px;letter-spacing:.18em;color:var(--mut);font-weight:600}
-  .nav .spacer{flex:1}
-  .pill{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:10.5px;font-weight:700;letter-spacing:.14em;
-    color:#cfe8ff;background:rgba(10,22,42,.55);
-    border:1px solid var(--line);border-radius:999px;padding:7px 12px;
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    white-space:nowrap;
-  }
-  .pill.ghost{color:var(--mut);font-weight:600}
-  .dot{width:7px;height:7px;border-radius:50%;background:#34e39a;box-shadow:0 0 0 0 rgba(52,227,154,.6);animation:pulse 2.2s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,227,154,.55)}70%{box-shadow:0 0 0 9px rgba(52,227,154,0)}100%{box-shadow:0 0 0 0 rgba(52,227,154,0)}}
-
-  /* hero */
-  .hero{
-    flex:1;display:flex;flex-direction:column;justify-content:center;
-    padding:34px 28px 18px;max-width:1240px;width:100%;margin:0 auto;
-    min-height:46svh;
-  }
-  .eyebrow{
-    display:flex;flex-wrap:wrap;gap:8px;align-items:center;
-    font-size:10.5px;font-weight:700;letter-spacing:.22em;color:var(--cyan);
-    opacity:0;animation:rise .8s .05s ease forwards;
-  }
-  .eyebrow .sep{color:rgba(159,176,200,.5);font-weight:400}
-  .eyebrow .dim{color:var(--mut)}
-  h1{
-    font-family:"Space Grotesk",Inter,sans-serif;
-    font-size:clamp(44px,7.2vw,88px);line-height:.95;letter-spacing:.04em;
-    margin:14px 0 6px;font-weight:700;
-    text-shadow:0 8px 40px rgba(0,0,0,.55);
-    opacity:0;animation:rise .8s .12s ease forwards;
-  }
-  h1 .thin{font-weight:500;color:#cfe3ff}
-  .sys{
-    font-family:"Space Grotesk",Inter,sans-serif;
-    font-size:clamp(15px,2.2vw,22px);font-weight:500;letter-spacing:.02em;
-    color:#d7e6ff;margin:0 0 12px;
-    opacity:0;animation:rise .8s .2s ease forwards;
-  }
-  .sys .bar{display:inline-block;width:26px;height:2px;background:var(--cyan);vertical-align:middle;margin-right:10px;border-radius:2px;box-shadow:0 0 12px rgba(95,212,255,.8)}
-  .tagline{
-    max-width:560px;color:#c3d2e8;font-size:clamp(13.5px,1.6vw,16px);line-height:1.65;margin:0 0 22px;
-    text-shadow:0 2px 18px rgba(0,0,0,.6);
-    opacity:0;animation:rise .8s .28s ease forwards;
-  }
-  .cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;opacity:0;animation:rise .8s .36s ease forwards}
-  .btn{
-    display:inline-flex;align-items:center;gap:10px;text-decoration:none;
-    font-size:14px;font-weight:700;letter-spacing:.01em;
-    padding:13px 22px;border-radius:12px;border:1px solid transparent;
-    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
-  }
-  .btn.primary{
-    color:#04121f;background:linear-gradient(135deg,#7fdcff,#2f80ed);
-    box-shadow:0 8px 32px rgba(47,128,237,.45), inset 0 1px 0 rgba(255,255,255,.5);
-  }
-  .btn.primary:hover{transform:translateY(-1px);box-shadow:0 12px 40px rgba(47,128,237,.6)}
-  .btn.ghost{
-    color:#dcecff;background:rgba(10,22,42,.5);border-color:var(--line);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-weight:600;
-  }
-  .btn.ghost:hover{border-color:rgba(95,212,255,.5);transform:translateY(-1px)}
-  .horizon-note{
-    display:inline-flex;align-items:center;gap:8px;margin-left:4px;
-    font-size:11px;letter-spacing:.14em;font-weight:600;color:rgba(207,232,255,.75);
-  }
-  .horizon-note i{width:28px;height:1px;background:rgba(95,212,255,.6);display:inline-block}
-  .meta-row{
-    display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;
-    font-size:11px;letter-spacing:.12em;font-weight:600;color:rgba(159,176,200,.85);
-    opacity:0;animation:rise .8s .44s ease forwards;
-  }
-  .meta-row span b{color:#dcecff;font-weight:700}
-  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-
-  /* cards */
-  .deck{max-width:1240px;width:100%;margin:0 auto;padding:6px 28px 16px}
-  .deck-label{
-    display:flex;align-items:center;gap:10px;margin:0 2px 10px;
-    font-size:10.5px;letter-spacing:.2em;font-weight:700;color:rgba(159,176,200,.9);
-  }
-  .deck-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
-  .cards{display:grid;grid-template-columns:1.45fr 1fr 1fr 1fr 1fr;gap:12px}
-  .card{
-    position:relative;display:flex;flex-direction:column;gap:8px;
-    text-decoration:none;color:var(--ink);
-    background:var(--glass);
-    border:1px solid var(--line);border-radius:var(--radius);
-    padding:16px 16px 14px;min-height:158px;overflow:hidden;
-    backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);
-    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
-    opacity:0;animation:rise .7s ease forwards;
-  }
-  .card:nth-child(1){animation-delay:.5s}.card:nth-child(2){animation-delay:.56s}
-  .card:nth-child(3){animation-delay:.62s}.card:nth-child(4){animation-delay:.68s}
-  .card:nth-child(5){animation-delay:.74s}
-  .card:hover{transform:translateY(-3px);border-color:rgba(95,212,255,.45);box-shadow:0 16px 44px rgba(2,8,20,.55), 0 0 0 1px rgba(95,212,255,.12) inset}
-  .card::before{
-    content:"";position:absolute;inset:0;pointer-events:none;opacity:.9;
-    background:linear-gradient(180deg,rgba(255,255,255,.07),transparent 38%);
-  }
-  .card.primary{
-    background:linear-gradient(180deg,rgba(23,52,96,.72),rgba(10,22,42,.62));
-    border-color:rgba(95,212,255,.4);
-    box-shadow:0 12px 40px rgba(47,128,237,.30);
-  }
-  .kicker{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.16em;color:var(--cyan)}
-  .kicker .n{color:rgba(159,176,200,.7);font-weight:600;letter-spacing:.08em}
-  .flag{
-    margin-left:auto;font-size:9px;letter-spacing:.14em;font-weight:800;
-    padding:4px 8px;border-radius:999px;
-    background:rgba(95,212,255,.14);border:1px solid rgba(95,212,255,.35);color:#bfeaff;
-  }
-  .flag.live{background:rgba(52,227,154,.12);border-color:rgba(52,227,154,.4);color:#b8f5d8}
-  .card h3{margin:0;font-family:"Space Grotesk",Inter,sans-serif;font-size:15.5px;line-height:1.25;font-weight:600}
-  .card p{margin:0;font-size:12.5px;line-height:1.55;color:#b9c8df;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .card .go{margin-top:auto;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#dcecff}
-  .card .go .arrow{
-    width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
-    border:1px solid var(--line);background:rgba(255,255,255,.06);transition:background .18s,border-color .18s;
-  }
-  .card:hover .go .arrow{background:rgba(95,212,255,.18);border-color:rgba(95,212,255,.5)}
-  .card .sub-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
-  .chip{
-    font-size:12px;font-weight:600;color:#dcecff;text-decoration:none;
-    border:1px solid var(--line);border-radius:999px;padding:6px 11px;background:rgba(255,255,255,.05);
-  }
-  .chip:hover{border-color:rgba(95,212,255,.5);background:rgba(95,212,255,.12)}
-
-  footer{
-    display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
-    max-width:1240px;width:100%;margin:0 auto;padding:10px 28px 20px;
-    font-size:10.5px;letter-spacing:.04em;color:rgba(107,125,153,.95);
-  }
-  footer .right{display:flex;gap:8px;align-items:center}
-  footer .live-tick{
-    display:inline-flex;align-items:center;gap:8px;
-    border:1px solid var(--line);border-radius:999px;padding:6px 12px;
-    background:rgba(10,22,42,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-    font-weight:600;letter-spacing:.1em;font-size:10px;color:#b9c8df;white-space:nowrap;
-  }
-
-  @media (max-width:1080px){
-    .cards{grid-template-columns:1fr 1fr 1fr}
-    .card.primary{grid-column:1/-1;min-height:132px}
-  }
-  @media (max-width:720px){
-    .nav{padding:12px 16px}
-    .pill.ghost{display:none}
-    .hero{padding:22px 18px 12px;min-height:44svh;justify-content:flex-end}
-    .horizon-note{display:none}
-    .deck{padding:4px 16px 12px}
-    .cards{grid-template-columns:1fr}
-    .card{min-height:0}
-    footer{padding:8px 16px 18px}
-  }
-  @media (prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important}
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="home/home.css"/>
 </head>
 <body>
-
-<div class="bg" aria-hidden="true">
-  <div class="poster"></div>
-  <video id="bgvideo" autoplay muted loop playsinline preload="auto"
-    poster="https://images.pexels.com/photos/5195490/pexels-photo-5195490.jpeg?auto=compress&cs=tinysrgb&w=1920">
-    <source src="https://videos.pexels.com/video-files/32927389/14034006_2560_1440_24fps.mp4" type="video/mp4"/>
-    <source src="https://videos.pexels.com/video-files/35137014/14885504_1920_1080_30fps.mp4" type="video/mp4"/>
-  </video>
-  <div class="shade"></div>
-  <div class="grain"></div>
-  <div class="topline"></div>
-</div>
-
-<div class="page">
-  <nav class="nav">
-    <a class="brand" href="index.html" aria-label="Drishti home">
-      <span class="mark">◈</span>
-      <span><b>DRISHTI</b><small>URBAN FLOOD INTELLIGENCE</small></span>
-    </a>
-    <span class="spacer"></span>
-    <span class="pill"><span class="dot"></span>0–3 HR NOWCAST</span>
-    <span class="pill ghost">SIH 2026 · PS-26085</span>
+<header class="nav">
+  <a class="mark" href="index.html"><span class="serif">Drishti</span></a>
+  <nav>
+    <a href="#how">How it works</a>
+    <a href="#numbers">Numbers</a>
+    <a href="#tools">Tools</a>
+    <a class="cta" href="dashboard/">Operations dashboard <span>→</span></a>
   </nav>
+</header>
 
-  <header class="hero">
-    <div class="eyebrow">REAL-TIME FLOOD INTELLIGENCE <span class="sep">·</span> <span class="dim">STREET-LEVEL PREDICTION</span></div>
-    <h1>DRISHTI</h1>
-    <p class="sys"><span class="bar"></span>Urban Flood Intelligence System</p>
-    <p class="tagline">Predicts street-level flooding and safer routes — live 0–3 hour nowcasts that turn rainfall, terrain and drainage into clear, street-by-street decisions.</p>
-    <div class="cta-row">
-      <a class="btn primary" href="dashboard/">Open Operations Dashboard <span aria-hidden="true">→</span></a>
-      <a class="btn ghost" href="flood_planner.html">Flood Risk Planner</a>
-      <a class="btn ghost" href="https://aman34243-drishti-flood-nowcast.static.hf.space/" target="_blank" rel="noopener">Live Model Nowcast ↗</a>
-      <span class="horizon-note"><i></i>NOW → +180 MIN</span>
+<section class="hero" id="top">
+  <canvas id="scene" aria-label="3D model of the KIET campus replaying a simulated storm"></canvas>
+  <div class="hero-copy">
+    <p class="kicker">SIH 2026 · PS-26085 · KIET Group of Institutions, Ghaziabad</p>
+    <h1>Know where the water will stand,<br><em>three hours before it does.</em></h1>
+    <p class="lede">Drishti turns radar rain, a terrain model and the campus drain network into street-by-street flood forecasts — with how sure it is, why it thinks so, and what to do about it.</p>
+    <div class="actions">
+      <a class="btn" href="dashboard/">Open the operations dashboard</a>
+      <a class="btn line" href="#how">See how it works</a>
     </div>
-    <div class="meta-row">
-      <span><b>5–180 MIN</b>&nbsp; LEAD TIME</span>
-      <span><b>CM-LEVEL</b>&nbsp; DEPTHS</span>
-      <span><b>U-NET · ONNX</b>&nbsp; ON-DEVICE</span>
+  </div>
+  <aside class="hud" aria-live="polite">
+    <div class="hud-row"><span>event time</span><b id="hTime">T+0</b></div>
+    <div class="hud-row"><span>rain on campus</span><b id="hRain">0.0 mm/h</b></div>
+    <div class="hud-row"><span>flooded ≥ 10 cm</span><b id="hArea">0 m²</b></div>
+    <div class="hud-row"><span>deepest street cell</span><b id="hDeep">0 cm</b></div>
+    <div class="hud-row"><span>drain nodes surcharged</span><b id="hSur">0</b></div>
+    <p class="hud-note">Replay of a simulated squall over the real campus terrain. Water columns drawn ×12 taller than life.</p>
+  </aside>
+  <div class="tape">
+    <button id="play" aria-label="Pause replay">❚❚</button>
+    <div class="tape-track">
+      <svg id="hyeto" preserveAspectRatio="none"></svg>
+      <input id="scrub" type="range" min="0" max="59" value="0" aria-label="Storm time"/>
     </div>
-  </header>
+    <span class="tape-lab">T+0 → T+300 min</span>
+  </div>
+  <div class="drag-hint">drag to orbit · scroll the page to read on</div>
+</section>
 
-  <section class="deck" aria-label="Drishti modules">
-    <p class="deck-label">OPERATIONAL MODULES</p>
-    <div class="cards">
-      <a class="card primary" href="flood_planner.html">
-        <span class="kicker"><span class="n">01</span> FLOOD RISK &amp; ROUTING <span class="flag">PRIMARY</span></span>
-        <h3>Flood Risk &amp; Safe Route Planner</h3>
-        <p>Tap any location for depth risk NOW→+180 min. Compare normal vs flood-aware routes.</p>
-        <span class="go"><span class="arrow">→</span> Open planner</span>
-      </a>
-      <a class="card" href="https://aman34243-drishti-flood-nowcast.static.hf.space/" target="_blank" rel="noopener">
-        <span class="kicker"><span class="n">02</span> LIVE INFERENCE <span class="flag live">● LIVE</span></span>
-        <h3>Live Model Nowcast</h3>
-        <p>Baseline U-Net in-browser. Pick a storm, lead time and route endpoints.</p>
-        <span class="go"><span class="arrow">↗</span> Launch demo</span>
-      </a>
-      <a class="card" href="kiet_3d_standalone.html">
-        <span class="kicker"><span class="n">03</span> 3D WORLD</span>
-        <h3>3D Terrain World</h3>
-        <p>Orbit the campus in 3D — terrain, buildings, roads and contours. Works offline.</p>
-        <span class="go"><span class="arrow">→</span> Enter 3D</span>
-      </a>
-      <a class="card" href="flood_viewer.html?bank=demo&amp;env=csv">
-        <span class="kicker"><span class="n">04</span> SIMULATION</span>
-        <h3>Flood Simulation</h3>
-        <p>Play and scrub storm scenarios. Inspect cells, drains, pipes and surcharge.</p>
-        <span class="go"><span class="arrow">→</span> Run scenarios</span>
-      </a>
-      <div class="card">
-        <span class="kicker"><span class="n">05</span> BASE MAPS</span>
-        <h3>2D Terrain / Road Map</h3>
-        <p>Lightweight Leaflet reference — elevation, slope and road-focused campus guide.</p>
-        <span class="sub-links">
-          <a class="chip" href="kiet_terrain_map.html">Terrain + Roads →</a>
-          <a class="chip" href="kiet_road_map.html">Roads →</a>
-        </span>
-      </div>
+<section class="band intro">
+  <div class="wrap two">
+    <h2 class="serif-xl">Monsoon cloudbursts fill a street in minutes. Most warnings say only that it will rain.</h2>
+    <div class="prose">
+      <p>A campus the size of KIET floods one low corner at a time: the lane behind a hostel, the underpass by the main gate, the inlet that has been silting up since June. City-scale warnings never get down to that level.</p>
+      <p>Drishti models the campus on a 5-metre grid, lets rain run over the real terrain and into a modelled drain network, and forecasts depth in every street cell for the next three hours. Every number on screen says whether it was observed, derived or modelled.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer>
-    <span>Roads/buildings © OpenStreetMap contributors · Terrain © DLR/Airbus/Copernicus (30 m DSM, broad relief only) · Synthetic drainage — demo, not engineering truth</span>
-    <span class="right"><span class="live-tick"><span class="dot"></span>STREET-LEVEL · NOWCASTING · SIH 2026</span></span>
-  </footer>
-</div>
+<section class="band" id="how">
+  <div class="wrap">
+    <p class="kicker">How it works</p>
+    <h2 class="serif-l">One loop, every five minutes.</h2>
+    <ol class="loop" id="loop">
+      <li><span class="n">01</span><h3>Read the sky</h3><p>Radar mosaic and eight rain gauges are pulled in and checked for spikes, frozen sensors, clock drift and gaps. Gauges correct the radar's bias.</p><div class="t" data-k="ingest_qc,mode_bias"></div></li>
+      <li><span class="n">02</span><h3>Nowcast the rain</h3><p>Optical flow tracks the storm; a 20-member STEPS ensemble extrapolates it for three hours and blends toward weather-model guidance after the first hour.</p><div class="t" data-k="nowcast"></div></li>
+      <li><span class="n">03</span><h3>Update the twin</h3><p>A coupled model routes water over the terrain and through the drains — inlets, pipes, a pump sump, outfalls — conserving mass to one part in a hundred million.</p><div class="t" data-k="twin_state"></div></li>
+      <li><span class="n">04</span><h3>Forecast the flood</h3><p>A U-Net trained on 290 physics runs turns every rain member into a depth map in a fraction of a second, so uncertainty is carried all the way to the street.</p><div class="t" data-k="surrogate"></div></li>
+      <li><span class="n">05</span><h3>Look closer where it matters</h3><p>Hotspots — high risk, high spread, or next to a building entrance — get a full physics re-run, then roads, routes and building access are scored.</p><div class="t" data-k="adaptive_roads"></div></li>
+    </ol>
+    <p class="loop-total" id="loopTotal"></p>
+  </div>
+</section>
 
-<script>
-(function(){
-  var v = document.getElementById('bgvideo');
-  function tryPlay(){ if(!v) return; var p = v.play(); if(p && p.catch){ p.catch(function(){}); } }
-  document.addEventListener('DOMContentLoaded', tryPlay);
-  document.addEventListener('touchend', tryPlay, {passive:true});
-  // If video 404s/offline, poster + gradient remains cinematic
-  if(v){ v.addEventListener('error', function(){ v.style.display='none'; }, true); }
-})();
-</script>
+<section class="band dark" id="numbers">
+  <div class="wrap">
+    <p class="kicker">Numbers</p>
+    <h2 class="serif-l">Measured against its own reference run.</h2>
+    <div class="figs" id="figs">
+      <div class="fig"><b data-f="csi">—</b><span>flood-map skill (CSI) of the fast model three hours ahead on storms it never saw, against <i data-f="csip">—</i> for “it stays as it is now”</span></div>
+      <div class="fig"><b data-f="warn">—</b><span>of the cells that later flooded were flagged in advance, median <i data-f="lead">—</i> ahead, with <i data-f="far">—</i> false alarms</span></div>
+      <div class="fig"><b data-f="assim">—</b><span>less water-level error at drain sensors once live readings are folded in</span></div>
+      <div class="fig"><b data-f="cycle">—</b><span>for one full forecast cycle on a laptop — well inside the five-minute budget</span></div>
+    </div>
+    <p class="fine">These scores come from a synthetic twin experiment: a hidden storm and drain state stand in for reality. They show the system works end to end, not how it would score against a real flood. The ensemble is still too confident — its P10–P90 band misses the truth more often than it should — and that is the next thing to fix.</p>
+  </div>
+</section>
+
+<section class="band" id="spec">
+  <div class="wrap two">
+    <div>
+      <p class="kicker">Specification</p>
+      <h2 class="serif-l">What sits underneath.</h2>
+    </div>
+    <table class="spec">
+      <tr><th>Terrain</th><td>Copernicus GLO-30 surface model, resampled to 5 m · Tier 1 data</td></tr>
+      <tr><th>Domain</th><td>KIET campus boundary (OSM), 76 × 104 cells, buildings and roads burned in</td></tr>
+      <tr><th>Drainage</th><td>63 nodes, 61 links, pump sump, 2 outfalls — synthetic, clearly marked unverified</td></tr>
+      <tr><th>Rain</th><td>1 km radar mosaic over 192 × 192 km, 8 gauges, weather-model blending past +60 min</td></tr>
+      <tr><th>Forecast</th><td>0–180 min at 14 lead times, 20 members, P10 / P50 / P90 and exceedance at 10, 20, 30 cm</td></tr>
+      <tr><th>Physics</th><td>Local-inertial 1D pipes, diffusive-wave 2D surface, weir/orifice inlets, Horton or SCS-CN infiltration</td></tr>
+      <tr><th>Degraded modes</th><td>Radar lost → gauges only, uncertainty ×1.5, forecast flagged; faulty sensors rejected</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="band" id="tools">
+  <div class="wrap">
+    <p class="kicker">Tools</p>
+    <h2 class="serif-l">Open any of them.</h2>
+    <ul class="index">
+      <li><a href="dashboard/"><span class="n">01</span><span class="t">Operations dashboard</span><span class="d">Live twin, forecast, hotspots, drainage health, routing, what-if, validation</span><span class="go">→</span></a></li>
+      <li><a href="flood_planner.html"><span class="n">02</span><span class="t">Flood risk planner</span><span class="d">Tap a spot for depth now to +180 min and compare normal and flood-aware routes</span><span class="go">→</span></a></li>
+      <li><a href="flood_viewer.html?bank=demo&amp;env=csv"><span class="n">03</span><span class="t">Simulation viewer</span><span class="d">Scrub storm scenarios cell by cell: runoff, drains, surcharge, flooding</span><span class="go">→</span></a></li>
+      <li><a href="kiet_3d_standalone.html"><span class="n">04</span><span class="t">3D terrain world</span><span class="d">Orbit the campus terrain, buildings, roads and contours — works offline</span><span class="go">→</span></a></li>
+      <li><a href="kiet_terrain_map.html"><span class="n">05</span><span class="t">Terrain map</span><span class="d">Elevation and slope reference map with the road network on top</span><span class="go">→</span></a></li>
+      <li><a href="kiet_road_map.html"><span class="n">06</span><span class="t">Road map</span><span class="d">Lightweight campus road guide</span><span class="go">→</span></a></li>
+      <li><a href="https://aman34243-drishti-flood-nowcast.static.hf.space/" target="_blank" rel="noopener"><span class="n">07</span><span class="t">In-browser model</span><span class="d">The first U-Net nowcaster running on your device, hosted on Hugging Face</span><span class="go">↗</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="serif">Drishti</span>
+    <p>Roads and buildings © OpenStreetMap contributors · Terrain © DLR / Airbus / Copernicus (30 m surface model, broad relief only) · Imagery © Esri · Drainage network and sensors are synthetic for this demonstration.</p>
+    <p class="mono">Smart India Hackathon 2026 · PS-26085 · KIET Group of Institutions</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="home/home.js"></script>
 </body>
 </html>

@@ -6,7 +6,9 @@ python -m http.server 8123            # from the repository root
 # open http://localhost:8123/dashboard/
 ```
 
-The page is static: Leaflet + Chart.js, no build step, and it deploys on Vercel as-is. Every
+The page is static: MapLibre GL (3D map: extruded buildings, water as ×12 exaggerated columns, 2D/3D and satellite/chart toggles) + Chart.js, no build step, and it deploys on Vercel as-is. Deep links open a view directly: `#forecast&lead=13`, `#prob`, `#drain`, `#impact`, `#actions&scen=pump_failure&diff=1`, `#live&drill=1`.
+
+The homepage (`index.html`, `home/`) replays the simulated storm in 3D (Three.js) over the real campus terrain, buildings and drain network, and reads its figures from the same bundle. Every
 number comes from real model runs, exported by `tools/export_dashboard.py`:
 
 - a Task-1 physics storm run and baselines B1–B5
