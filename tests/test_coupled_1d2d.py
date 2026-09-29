@@ -115,3 +115,22 @@ def test_swmm_export(env):
     inp = to_inp(net)
     for sec in ("[JUNCTIONS]", "[OUTFALLS]", "[STORAGE]", "[CONDUITS]", "[PUMPS]", "[XSECTIONS]"):
         assert sec in inp
+
+
+def test_1d_engine_matches_manning_normal_flow():
+    """Verification: steady inflow through a uniform pipe chain reproduces Manning normal flow."""
+    from scipy.optimize import brentq
+    from simulation.drainage.network import pipe_capacity
+    from simulation.hydraulics.network1d import Drainage1D
+    D, S, n, L, Q = 0.6, 0.005, 0.013, 50.0, 0.2
+    nodes = [{"id": k, "kind": "junction" if k < 3 else "outfall", "i": 0, "j": k,
+              "invert_m": 10 - k * S * L, "rim_m": 13 - k * S * L, "area_m2": 1.0} for k in range(4)]
+    edges = [{"id": k, "u": k, "v": k + 1, "length_m": L, "diameter_m": D, "n": n,
+              "capacity_m3s": pipe_capacity(D, S, n)} for k in range(3)]
+    dr = Drainage1D({"nodes": nodes, "edges": edges}, {3: Boundary()})
+    for _ in range(1800):
+        dr.advance(1.0, np.array([Q, 0, 0, 0]))
+    assert np.allclose(dr.Q, Q, rtol=1e-3)
+    yn = brentq(lambda y: (lambda A, R: A * R ** (2 / 3) * S ** 0.5 / n)(
+        *circ_geom(np.array([y]), np.array([D])))[0] - Q, 1e-4, D * 0.999)
+    assert abs(dr.depth()[1] - yn) / yn < 0.08
