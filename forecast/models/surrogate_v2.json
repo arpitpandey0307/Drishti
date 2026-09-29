@@ -1,0 +1,389 @@
+{
+ "model": "surrogate_v2",
+ "arch": "residual U-Net (base 24)",
+ "params": 270182,
+ "inputs": {
+  "channels": 36,
+  "static": [
+   "dem",
+   "slope",
+   "flow_accum_log",
+   "low_points",
+   "imperv",
+   "manning",
+   "is_road",
+   "is_building",
+   "in_domain"
+  ],
+  "hist_steps": 6,
+  "leads_steps": [
+   1,
+   2,
+   3,
+   4,
+   6,
+   8,
+   10,
+   12,
+   15,
+   18,
+   21,
+   24,
+   30,
+   36
+  ],
+  "lead_min": [
+   5,
+   10,
+   15,
+   20,
+   30,
+   40,
+   50,
+   60,
+   75,
+   90,
+   105,
+   120,
+   150,
+   180
+  ],
+  "future_rain": "cumulative mm to each lead",
+  "scales": {
+   "rain_mmh": 50.0,
+   "depth_m": 0.2,
+   "cum_mm": 50.0
+  },
+  "crop": [
+   [
+    11,
+    87
+   ],
+   [
+    28,
+    132
+   ]
+  ]
+ },
+ "output": "surface depth (m) at each lead",
+ "training": {
+  "epochs": 12,
+  "batch": 16,
+  "lr": 0.002,
+  "log": [
+   {
+    "epoch": 1,
+    "train_loss": 0.278,
+    "val_rmse_mean_m": 0.031,
+    "elapsed_s": 84
+   },
+   {
+    "epoch": 2,
+    "train_loss": 0.1541,
+    "val_rmse_mean_m": 0.0236,
+    "elapsed_s": 167
+   },
+   {
+    "epoch": 3,
+    "train_loss": 0.1264,
+    "val_rmse_mean_m": 0.0213,
+    "elapsed_s": 251
+   },
+   {
+    "epoch": 4,
+    "train_loss": 0.1011,
+    "val_rmse_mean_m": 0.0187,
+    "elapsed_s": 333
+   },
+   {
+    "epoch": 5,
+    "train_loss": 0.08,
+    "val_rmse_mean_m": 0.0182,
+    "elapsed_s": 416
+   },
+   {
+    "epoch": 6,
+    "train_loss": 0.0678,
+    "val_rmse_mean_m": 0.0179,
+    "elapsed_s": 499
+   },
+   {
+    "epoch": 7,
+    "train_loss": 0.0608,
+    "val_rmse_mean_m": 0.017,
+    "elapsed_s": 585
+   },
+   {
+    "epoch": 8,
+    "train_loss": 0.0516,
+    "val_rmse_mean_m": 0.0167,
+    "elapsed_s": 673
+   },
+   {
+    "epoch": 9,
+    "train_loss": 0.045,
+    "val_rmse_mean_m": 0.0163,
+    "elapsed_s": 757
+   },
+   {
+    "epoch": 10,
+    "train_loss": 0.0414,
+    "val_rmse_mean_m": 0.016,
+    "elapsed_s": 840
+   },
+   {
+    "epoch": 11,
+    "train_loss": 0.0385,
+    "val_rmse_mean_m": 0.0159,
+    "elapsed_s": 923
+   },
+   {
+    "epoch": 12,
+    "train_loss": 0.0372,
+    "val_rmse_mean_m": 0.0159,
+    "elapsed_s": 1006
+   }
+  ],
+  "train_windows": 6448,
+  "wall_s": 1006
+ },
+ "dataset": {
+  "path": "outputs\\datasets\\v2",
+  "manifest_sha1": "d7f504830a97c7fe6ef41fc9c3de59157097c749",
+  "provenance": "synthetic (Task-1 physics)"
+ },
+ "metrics": {
+  "test": {
+   "lead_min": [
+    5,
+    10,
+    15,
+    20,
+    30,
+    40,
+    50,
+    60,
+    75,
+    90,
+    105,
+    120,
+    150,
+    180
+   ],
+   "rmse_m": [
+    0.0066,
+    0.0087,
+    0.0105,
+    0.0119,
+    0.0143,
+    0.0162,
+    0.0181,
+    0.0196,
+    0.0219,
+    0.0235,
+    0.0246,
+    0.0254,
+    0.0258,
+    0.0238
+   ],
+   "rmse_persistence_m": [
+    0.0074,
+    0.0115,
+    0.0156,
+    0.0192,
+    0.0257,
+    0.0313,
+    0.036,
+    0.0401,
+    0.0454,
+    0.0493,
+    0.0521,
+    0.0536,
+    0.0539,
+    0.0512
+   ],
+   "csi_5cm": [
+    0.898,
+    0.845,
+    0.824,
+    0.815,
+    0.8,
+    0.796,
+    0.794,
+    0.79,
+    0.79,
+    0.797,
+    0.799,
+    0.787,
+    0.79,
+    0.789
+   ],
+   "csi_10cm": [
+    0.925,
+    0.879,
+    0.848,
+    0.835,
+    0.817,
+    0.811,
+    0.806,
+    0.802,
+    0.797,
+    0.796,
+    0.796,
+    0.79,
+    0.784,
+    0.785
+   ],
+   "csi_5cm_persistence": [
+    0.906,
+    0.829,
+    0.762,
+    0.704,
+    0.608,
+    0.533,
+    0.472,
+    0.422,
+    0.364,
+    0.326,
+    0.3,
+    0.284,
+    0.269,
+    0.263
+   ],
+   "csi_10cm_persistence": [
+    0.892,
+    0.813,
+    0.741,
+    0.681,
+    0.582,
+    0.506,
+    0.444,
+    0.394,
+    0.337,
+    0.3,
+    0.275,
+    0.259,
+    0.244,
+    0.238
+   ],
+   "windows": 806
+  },
+  "ood": {
+   "lead_min": [
+    5,
+    10,
+    15,
+    20,
+    30,
+    40,
+    50,
+    60,
+    75,
+    90,
+    105,
+    120,
+    150,
+    180
+   ],
+   "rmse_m": [
+    0.007,
+    0.009,
+    0.0103,
+    0.0112,
+    0.0128,
+    0.0139,
+    0.0147,
+    0.0158,
+    0.0176,
+    0.0185,
+    0.0194,
+    0.0206,
+    0.0214,
+    0.0208
+   ],
+   "rmse_persistence_m": [
+    0.0082,
+    0.0129,
+    0.017,
+    0.0205,
+    0.0261,
+    0.0305,
+    0.0342,
+    0.0375,
+    0.0419,
+    0.0455,
+    0.0481,
+    0.0499,
+    0.0519,
+    0.0518
+   ],
+   "csi_5cm": [
+    0.91,
+    0.869,
+    0.846,
+    0.83,
+    0.81,
+    0.807,
+    0.809,
+    0.801,
+    0.789,
+    0.799,
+    0.804,
+    0.787,
+    0.793,
+    0.79
+   ],
+   "csi_10cm": [
+    0.915,
+    0.87,
+    0.845,
+    0.834,
+    0.812,
+    0.804,
+    0.803,
+    0.795,
+    0.777,
+    0.781,
+    0.781,
+    0.768,
+    0.769,
+    0.775
+   ],
+   "csi_5cm_persistence": [
+    0.902,
+    0.823,
+    0.755,
+    0.697,
+    0.606,
+    0.537,
+    0.482,
+    0.436,
+    0.379,
+    0.334,
+    0.301,
+    0.276,
+    0.243,
+    0.228
+   ],
+   "csi_10cm_persistence": [
+    0.892,
+    0.813,
+    0.741,
+    0.682,
+    0.588,
+    0.517,
+    0.461,
+    0.415,
+    0.356,
+    0.311,
+    0.278,
+    0.254,
+    0.221,
+    0.207
+   ],
+   "windows": 930
+  }
+ },
+ "torch": "2.14.0+cpu",
+ "limits": "Emulates network variant 0 with nominal pumps and free outfalls; other drainage states are handled by the adaptive physics refinement (Module M local level)."
+}

@@ -50,11 +50,13 @@ def _bbox(mask, pad=2):
 
 def simulate(twin, network, spec, hydro_cfg, rain_cfg, out_every=1,
              dem=None, manning=None, imperv_open=None,
-             inlet_cap_scale=1.0, dep_scale=1.0, components=None, drainage_cfg=None):
+             inlet_cap_scale=1.0, dep_scale=1.0, components=None, drainage_cfg=None, rain=None):
     """Run one scenario. Optional overrides (dataset v1.0 uncertainty, recorded in spec):
     dem / manning grids, inlet_cap_scale, dep_scale. `imperv_open` is metadata only.
     spec keys: seed, temporal, spatial, duration_h, total_mm, blockage_level, blockage_mode,
     optional recession_h, boundary {type,...}, pump_status {edge_id: auto|on|off|failed}.
+    `rain` (nt, ny, nx) mm per output step replaces the spec-generated storm (used by the
+    forecast engine to run observed / nowcast rainfall); temporal/spatial/total_mm are then ignored.
     """
     comp = dict(DEFAULT_COMPONENTS, **(components or {}))
     dcfg = drainage_cfg or C.load("drainage")
@@ -63,12 +65,15 @@ def simulate(twin, network, spec, hydro_cfg, rain_cfg, out_every=1,
     rng = np.random.default_rng(int(spec["seed"]) + 999)
 
     # ---- rainfall (mm per output step), normalised so spec total = mean over wet cells
-    rain = gen_rain(spec, twin.X, twin.Y, rain_cfg)
-    R = rain["rain_mm_per_step"]
     wet_full = twin.in_domain & ~twin.is_building
-    wetmean = float(R.mean(axis=(1, 2), where=np.broadcast_to(wet_full, R.shape)).mean())
-    R = R / max(wetmean * R.shape[0], 1e-9) * float(spec["total_mm"])
-    nt = rain["nt"]
+    if rain is None:
+        gen = gen_rain(spec, twin.X, twin.Y, rain_cfg)
+        R = gen["rain_mm_per_step"]
+        wetmean = float(R.mean(axis=(1, 2), where=np.broadcast_to(wet_full, R.shape)).mean())
+        R = R / max(wetmean * R.shape[0], 1e-9) * float(spec["total_mm"])
+    else:
+        R = np.maximum(np.asarray(rain, np.float32), 0.0)
+    nt = R.shape[0]
     dt = float(rain_cfg.get("timestep_min", 5)) * 60.0
     n_rec = int(round(float(spec.get("recession_h", 0.0) or 0.0) * 3600.0 / dt))
     R_ext = np.concatenate([R, np.zeros((n_rec,) + R.shape[1:], R.dtype)]) if n_rec else R

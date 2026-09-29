@@ -12,11 +12,12 @@ Pilot area: KIET campus, Ghaziabad.
 | Path | What it is |
 |---|---|
 | `simulation/` | Physics: `terrain/` (DEM twin), `drainage/` (network graph + SWMM export), `surface/` (runoff + 2D flow), `hydraulics/` (1D engine, exchange, boundaries, coupled loop), `rainfall/`, `scenarios/`, `validation/` |
+| `forecast/` | Task 2: rainfall adapters + QC, STEPS ensemble nowcast, ONNX flood surrogate, probabilistic forecast, hotspot refinement — `python -m forecast.run` ([docs](docs/forecast.md)) |
 | `dataset/` | Synthetic dataset generator (HDF5), normalization, QC plots |
 | `models/` | Baseline U-Net nowcaster + trainers |
 | `api/` | Flood-safe routing (`route.py`) and nowcast-driven routing (`route_nowcast.py`) |
 | `visualization/data_adapter/` | Exports simulation outputs to viewer bundles |
-| `config/` | YAML configs (terrain, drainage, hydraulics, rainfall, simulation) |
+| `config/` | YAML configs (terrain, drainage, hydraulics, rainfall, simulation, forecast) |
 | `data/` | GeoJSON (roads, campus), terrain overlays, `raw/rainfall/` CSVs |
 | `kiet_terrain/`, `kiet_campus_map/` | DEM package and campus boundary reconstruction |
 | `planner/`, `outputs/viz-demo/` | Pre-computed demo storms for the dashboards |

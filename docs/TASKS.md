@@ -9,7 +9,7 @@ simulated sensors. Every output must be labelled *observed / derived / modelled 
 | # | Task | SRS modules | Acceptance criteria | Effort |
 |---|---|---|---|---|
 | 1 | Physics core: coupled 1D/2D twin — **DONE** ([details](simulation.md)) | D, E, F, G, H, I | AC-02 … AC-06 | 5–6 person-weeks (pw) |
-| 2 | Rainfall nowcast + probabilistic flood forecast | A, B, C, M, N | AC-01, AC-07, AC-08, AC-12, AC-19 | 5–6 pw |
+| 2 | Rainfall nowcast + probabilistic flood forecast — **DONE** ([details](forecast.md)) | A, B, C, M, N | AC-01, AC-07, AC-08, AC-12, AC-19 | 5–6 pw |
 | 3 | Closed loop: data assimilation + drainage health | J, K, L, U, V | AC-09, AC-10, AC-11 | 5–6 pw |
 | 4 | Decisions: impact, routing, what-if, actions, sensors | O, P, Q, R, S, T, X | AC-13, AC-14, AC-15, AC-20 | 5–6 pw |
 | 5 | Platform: API, dashboard, validation, security | W, Y, Z, §12–§24 | AC-16, AC-17, AC-18 | 6–7 pw |
@@ -75,7 +75,12 @@ depth/velocity/node-state time series; mass-balance test; baseline experiments B
 
 ---
 
-## Task 2 — Rainfall Nowcast + Probabilistic Flood Forecast
+## Task 2 — Rainfall Nowcast + Probabilistic Flood Forecast ✅ DONE
+
+> Implemented in `forecast/`. pysteps has no Python 3.14 wheel, so STEPS (optical flow, AR(2)
+> cascade, stochastic noise, blending) is re-implemented in NumPy. The surrogate was retrained on
+> 290 fresh Task-1 physics runs and exported to ONNX (1 MB, shipped in `forecast/models/`).
+> See [`forecast.md`](forecast.md) for results and limitations.
 
 **Goal:** from rainfall observations to a 0–180 min forecast with P10/P50/P90 depth and
 exceedance probabilities, fast enough to refresh every 5 minutes.

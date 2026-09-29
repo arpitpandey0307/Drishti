@@ -7,3 +7,4 @@ pytest
 # ML nowcaster (training / inference)
 torch
 onnxruntime
+onnx                 # surrogate export (forecast/surrogate/train.py)

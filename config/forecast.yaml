@@ -1,0 +1,63 @@
+# Rainfall nowcast + probabilistic flood forecast (SRS Modules A, B, C, M, N — Task 2).
+regional_grid:                      # radar-scale grid centred on the campus (terrain.yaml centre)
+  nx: 192
+  ny: 192
+  dx_km: 1.0
+step_min: 5                         # observation cadence and nowcast step
+max_lead_min: 180
+
+quality:                            # Module B thresholds
+  radar_max_mmh: 300.0
+  radar_stale_min: 10
+  radar_min_coverage: 0.8           # fraction of finite pixels
+  radar_jump_factor: 10.0           # domain-mean change vs previous frame
+  gauge_max_mm_per_5min: 50.0       # 600 mm/h
+  gauge_stale_min: 15
+  gauge_spike_mm: 10.0              # 5-min accumulation that must be corroborated
+  gauge_spike_ratio: 5.0
+  gauge_frozen_steps: 6             # identical non-zero reports
+  clock_tolerance_s: 60
+  contradiction_mmh: 5.0            # radar says > this while gauge reports 0 (or vice versa)
+  contradiction_steps: 3
+
+nowcast:                            # Module C (STEPS-style, in-house; pysteps has no py3.14 wheel)
+  members: 20
+  rain_threshold_mmh: 0.1
+  n_cascade_levels: 6
+  motion_smooth_px: 6.0
+  motion_perturb_mps: 1.0           # per-member steering perturbation (grows with lead)
+  gauge_bias:
+    window_min: 60
+    min_pairs: 4
+    min_total_mm: 2.0               # paired accumulation needed in both radar and gauges
+    clip: [0.33, 3.0]
+  # nowcast weight vs lead (rest goes to NWP / climatology). 0-60 min radar-dominant (FR-C03).
+  blend_weight: {0: 1.0, 30: 1.0, 60: 0.85, 120: 0.45, 180: 0.2}
+  nwp_spread: 0.5                   # log-normal member spread on NWP guidance
+  degraded:                         # radar unavailable -> gauge-only (SRS §16)
+    weight_factor: 0.6
+    noise_factor: 1.5
+    motion_max_age_min: 30
+
+climatology:
+  daily_csv: data/raw/rainfall/daily_rainfall_2016_2026.csv
+  months: [6, 7, 8, 9]              # monsoon
+  wet_day_mm: 2.5
+  effective_duration_h: 6.0         # wet-day total spread over this many hours -> hourly rate
+
+surrogate:
+  model: forecast/models/surrogate_v2.onnx
+  meta: forecast/models/surrogate_v2.json
+
+flood:                              # Module N
+  thresholds_m: [0.10, 0.20, 0.30]
+  flood_depth_m: 0.10
+  report_leads_min: [15, 30, 60, 120, 180]
+
+adaptive:                           # Module M local level
+  tile: 16
+  max_tiles: 6
+  risk_p: 0.3                       # P(depth > 0.2 m) at any lead
+  spread_m: 0.10                    # P90 - P10 peak depth
+  critical_radius_m: 25.0
+  representative_quantiles: [0.5, 0.9]

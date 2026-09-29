@@ -29,6 +29,8 @@ kiet_terrain/data/
 *.pt
 *.onnx
 *.onnx.data
+# Task-2 flood surrogate is small (~1 MB) and ships with the code so run_forecast works offline
+!forecast/models/surrogate_v2.onnx
 # hosted Space binaries (fetch from HF Space; see space/README.md)
 space/windows/*.bin
 # python/build caches
