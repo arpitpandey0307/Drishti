@@ -1,0 +1,51 @@
+{
+  "title": "KIET campus reconstruction package",
+  "site": {
+    "name": "KIET Group of Institutions / KIET Deemed to be University",
+    "address": "KIET, Delhi-NCR, Ghaziabad-Meerut Road, Ghaziabad 201206",
+    "anchor": {
+      "latitude": 28.75257,
+      "longitude": 77.49851,
+      "source": "Mapcarta/OSM way 835252667",
+      "confidence": "high"
+    }
+  },
+  "boundary": {
+    "source_image": "Untitleddesign(10).png",
+    "pixel_geometry": "boundary_points.json and boundary.geojson",
+    "note": "The red outline was extracted from the supplied 1920x1080 screenshot. Geographic coordinates are approximate; use pixel geometry for exact overlay alignment."
+  },
+  "verified_facility_classes": [
+    "academic blocks A-H",
+    "100+ ICT-enabled classrooms",
+    "Central Library and eight departmental libraries",
+    "auditorium (>550 seats), seminar halls and mini-conference rooms",
+    "campus temple",
+    "cricket, football, volleyball and basketball grounds/courts",
+    "badminton and lawn tennis courts",
+    "indoor sports and gymnasiums",
+    "boys and girls hostels",
+    "24/7 Medical Centre and ambulance support",
+    "faculty apartments and guest houses"
+  ],
+  "visible_labels_from_screenshot": [
+    "Jayant Hostel",
+    "BEAST A Fitness Junction",
+    "KIET Group of Institutions",
+    "KIET FOOTBALL GROUND",
+    "KIET FC playground",
+    "KIET SSB Academy",
+    "KIET Deemed To Be University",
+    "KIET Cricket Ground",
+    "KIET Temple",
+    "Inn0geeks",
+    "Creative Cell Room",
+    "KIET School of Pharmacy"
+  ],
+  "data_quality": "Boundary pixel positions are reproducible. Facility locations are label-level observations from the screenshot, not surveyed building footprints. Verify each point against current imagery or a campus GIS survey before navigation, emergency, or construction use.",
+  "sources": [
+    "https://www.kiet.edu/campus-life/infrastructure/",
+    "https://mapcarta.com/W835252667",
+    "https://www.openstreetmap.org/way/835252667"
+  ]
+}

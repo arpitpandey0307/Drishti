@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Interactive Flood Risk &amp; Safe Route Planner — KIET</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+:root{--ink:#0f1b2d;--mut:#5b6b82;--card:#ffffff;--line:#dbe3ee;--ok:#1a7f4b;--watch:#b7791f;--warn:#c2510c;--danger:#c0272d;--blue:#1f6feb}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#eef2f7;display:flex;flex-direction:column}
+header{background:#0e1e33;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header h1{font-size:17px;margin:0;font-weight:700}
+header .sub{font-size:12px;color:#9fb4d0}
+.badge{font-size:10px;letter-spacing:.06em;background:#5a3b12;border:1px solid #c98a2d;color:#ffd9a0;border-radius:99px;padding:3px 10px;white-space:nowrap}
+#storm{margin-left:auto;font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid #2a3d5e;background:#16294a;color:#fff}
+main{flex:1;display:flex;min-height:0}
+#map{flex:1;min-width:0}
+aside{width:340px;background:var(--card);border-left:1px solid var(--line);overflow-y:auto;padding:14px}
+.card{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
+.card h2{font-size:13px;margin:0 0 8px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
+.horizon{display:flex;align-items:center;gap:8px}
+.horizon input{flex:1}
+.horizon b{font-size:15px;min-width:86px;text-align:right}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.metric{background:#f4f7fb;border-radius:8px;padding:8px}
+.metric small{display:block;font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.metric b{font-size:17px}
+.risk{display:inline-block;font-weight:700;font-size:13px;border-radius:99px;padding:4px 12px;color:#fff}
+.risk.ok{background:var(--ok)}.risk.watch{background:var(--watch)}.risk.warn{background:var(--warn)}.risk.danger{background:var(--danger)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+button{font-size:13px;padding:7px 12px;border-radius:8px;border:1px solid var(--blue);background:#fff;color:var(--blue);cursor:pointer}
+button.on,button.primary{background:var(--blue);color:#fff}
+button:disabled{opacity:.45;cursor:default}
+.routestat{font-size:13px;line-height:1.7}
+.routestat .safe{color:var(--ok);font-weight:700}.routestat .norm{color:var(--mut)}
+.legend{font-size:11px;color:var(--mut);line-height:1.9}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:baseline}
+footer{font-size:11px;color:var(--mut);padding:8px 16px;background:#fff;border-top:1px solid var(--line)}
+@media(max-width:820px){main{flex-direction:column}#map{height:46vh}aside{width:auto;border-left:0;border-top:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<header>
+<div><h1>Flood Risk &amp; Safe Route Planner</h1><div class="sub">KIET campus · for commuters, emergency services &amp; campus authorities</div></div>
+<span class="badge">SYNTHETIC DEMO — predictions, not observations</span>
+<select id="storm" title="Storm scenario"></select>
+</header>
+<main>
+<div id="map"></div>
+<aside>
+<div class="card"><h2>1 · Forecast horizon</h2>
+<div class="horizon"><input id="horizon" type="range" min="0" max="9" step="1" value="3"/><b id="horizonLab">+30 min</b></div>
+<div class="btnrow" style="margin-top:8px"><button id="bPlay" class="primary">▶ Simulate flood</button></div>
+<div class="legend"><span class="sw" style="background:#e3ecf7"></span>dry &lt;5cm <span class="sw" style="background:#7fb3f7"></span>5–15cm <span class="sw" style="background:#f7b731"></span>15–30cm <span class="sw" style="background:#e0393e"></span>&gt;30cm</div>
+</div>
+<div class="card"><h2>2 · Selected location <span id="risk" class="risk ok" style="margin-left:6px">tap map</span></h2>
+<div class="metrics">
+<div class="metric"><small>Water now</small><b id="mNow">–</b></div>
+<div class="metric"><small>At horizon</small><b id="mHor">–</b></div>
+<div class="metric"><small>Peak (0–180)</small><b id="mPeak">–</b></div>
+<div class="metric"><small>Onset ≥5cm</small><b id="mOnset">–</b></div>
+</div>
+<div id="mRoad" style="font-size:12px;color:var(--mut);margin-top:8px">Tap anywhere for depth · tap a road for road-level risk.</div>
+</div>
+<div class="card"><h2>3 · Plan a route</h2>
+<div class="btnrow">
+<button id="bOrg">Set origin</button><button id="bDst">Set destination</button><button id="bGo" class="primary" disabled>Find routes</button><button id="bClr">Clear</button>
+</div>
+<div id="rOut" class="routestat" style="margin-top:8px">Pick origin &amp; destination on the map, then Find routes.</div>
+</div>
+</aside>
+</main>
+<footer>Depths predicted by Drishti baseline U-Net on synthetic drainage (demo). Roads/buildings © OpenStreetMap contributors · Terrain © DLR/Airbus/Copernicus 30m DSM. Never use for engineering or rescue decisions without verification.</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const NY=110, NX=160, LEADS=[0,5,10,20,30,40,60,90,120,180];
+const STORMS=["storm-a-val00213","storm-b-test00224"];
+const state={storm:0,hi:3,frames:null,meta:null,sel:null,roadVerts:[],graph:null,origin:null,dest:null,mode:null,routes:{}};
+const $=id=>document.getElementById(id);
+const map=L.map("map").setView([28.75257,77.49851],16);
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap contributors"}).addTo(map);
+L.control.scale().addTo(map);
+let heatLayer=null, routeLayers=[], selMarker=null, odMarkers=[];
+function ll2rc(lat,lon){const[[s,w],[n,e]]=state.meta.bounds;
+  return[Math.round((n-lat)/(n-s)*(NY-1)),Math.round((lon-w)/(e-w)*(NX-1))];}
+function depthAt(fr,r,c){return(r<0||c<0||r>=NY||c>=NX)?0:Math.max(0,fr[r*NX+c]);}
+function riskOf(peak){return peak<0.05?["ok","CLEAR"]:peak<0.15?["watch","WATCH"]:peak<0.30?["warn","WARNING"]:["danger","DANGER"];}
+function fmtD(m){return m<0.005?"0 cm":(m*100).toFixed(m<0.1?1:0)+" cm";}
+function depthColor(d){if(d<0.05)return[227,236,247,0];if(d<0.15)return[127,179,247,215];if(d<0.30)return[247,183,49,215];return[224,57,62,220];}
+function drawHeat(){
+  if(!state.frames||!state.meta)return;
+  const fr=state.frames[state.hi], cv=document.createElement("canvas");
+  cv.width=NX;cv.height=NY;const cx=cv.getContext("2d"),img=cx.createImageData(NX,NY);
+  for(let k=0;k<NX*NY;k++){const[a,b,c,d]=depthColor(Math.max(0,fr[k]));img.data[4*k]=a;img.data[4*k+1]=b;img.data[4*k+2]=c;img.data[4*k+3]=d;}
+  cx.putImageData(img,0,0);
+  if(heatLayer)map.removeLayer(heatLayer);
+  heatLayer=L.imageOverlay(cv.toDataURL(),state.meta.bounds,{opacity:0.6,interactive:false}).addTo(map);
+}
+function updateMetrics(){
+  if(!state.sel||!state.frames)return;
+  const[r,c]=state.sel, F=state.frames;
+  const now=F[0][r*NX+c], hor=F[state.hi][r*NX+c];
+  let peak=0,onset=null;
+  F.forEach((f,i)=>{const d=Math.max(0,f[r*NX+c]);if(d>peak)peak=d;if(onset===null&&d>=0.05)onset=LEADS[i];});
+  $("mNow").textContent=fmtD(Math.max(0,now));$("mHor").textContent=fmtD(Math.max(0,hor));
+  $("mPeak").textContent=fmtD(peak);$("mOnset").textContent=onset===null?"—":(onset===0?"now":"+"+onset+" min");
+  const[cls,lab]=riskOf(peak),el=$("risk");el.textContent=lab;el.className="risk "+cls;
+}
+function nearestRoad(lat,lon){
+  let best=null,bd=1e18;
+  for(const v of state.roadVerts){const d=(v[0]-lat)**2+(v[1]-lon)**2;if(d<bd){bd=d;best=v;}}
+  return best?{node:best,feat:best[2]}:null;
+}
+function buildGraph(roads){
+  const nodes=new Map(),adj=new Map();
+  const hav=(a,b)=>{const R=6371000,t=Math.PI/180,dLa=(b[0]-a[0])*t,dLo=(b[1]-a[1])*t;
+    return 2*R*Math.asin(Math.sqrt(Math.sin(dLa/2)**2+Math.cos(a[0]*t)*Math.cos(b[0]*t)*Math.sin(dLo/2)**2));};
+  const key=p=>p[0].toFixed(6)+","+p[1].toFixed(6);
+  for(const f of roads.features){
+    const lines=f.geometry.type==="LineString"?[f.geometry.coordinates]:f.geometry.type==="MultiLineString"?f.geometry.coordinates:[];
+    for(const line of lines)for(let i=0;i<line.length;i++){
+      const p=[line[i][1],line[i][0]],k=key(p);
+      if(!nodes.has(k))nodes.set(k,p);
+      state.roadVerts.push([p[0],p[1],(f.properties||{}).name||(f.properties||{}).highway||"road"]);
+      if(i>0){const pk=key([line[i-1][1],line[i-1][0]]);
+        const w=hav(nodes.get(pk),p);
+        if(!adj.has(pk))adj.set(pk,[]);if(!adj.has(k))adj.set(k,[]);
+        adj.get(pk).push({to:k,w,ax:nodes.get(pk),bx:p});adj.get(k).push({to:pk,w,ax:p,bx:nodes.get(pk)});}
+    }
+  }
+  // largest connected component (for robust demo endpoints)
+  const seen=new Set();let big=[];
+  for(const k of nodes.keys()){
+    if(seen.has(k))continue;const comp=[];const st=[k];seen.add(k);
+    while(st.length){const c=st.pop();comp.push(c);for(const e of(adj.get(c)||[]))if(!seen.has(e.to)){seen.add(e.to);st.push(e.to);}}
+    if(comp.length>big.length)big=comp;
+  }
+  const far=(src)=>{const d=new Map([[src,0]]),q=[src];let fk=src;
+    while(q.length){const c=q.shift();fk=c;for(const e of(adj.get(c)||[]))if(!d.has(e.to)){d.set(e.to,d.get(c)+1);q.push(e.to);}}
+    return fk;};
+  const mainA=big.length?far(big[0]):null, mainB=mainA?far(mainA):null;
+  return{nodes,adj,hav,main:[mainA,mainB].filter(Boolean).map(k=>nodes.get(k))};
+}
+function edgeDepth(fr,a,b){
+  let m=0;for(let t=0;t<=4;t++){const la=a[0]+(b[0]-a[0])*t/4, lo=a[1]+(b[1]-a[1])*t/4;
+    const[r,c]=ll2rc(la,lo);const d=depthAt(fr,r,c);if(d>m)m=d;}return m;
+}
+function route(graph,fr,fromK,toK,safe){
+  const dist=new Map([[fromK,0]]),prev=new Map(),open=[[0,fromK]],done=new Set();
+  const wEst=k=>graph.hav(graph.nodes.get(k),graph.nodes.get(toK));
+  while(open.length){
+    open.sort((a,b)=>a[0]-b[0]);const[,cur]=open.shift();
+    if(cur===toK)break;if(done.has(cur))continue;done.add(cur);
+    for(const e of(graph.adj.get(cur)||[])){
+      const d=edgeDepth(fr,e.ax,e.bx);
+      if(safe&&d>=0.30)continue;
+      const w=e.w*(safe?(1+10*Math.min(d,0.30)/0.30):1);
+      const nd=dist.get(cur)+w;
+      if(nd<(dist.get(e.to)??1e18)){dist.set(e.to,nd);prev.set(e.to,cur);open.push([nd+wEst(e.to),e.to]);}
+    }
+  }
+  if(!prev.has(toK))return null;
+  const path=[];let cur=toK;while(cur){path.push(graph.nodes.get(cur));cur=prev.get(cur);}
+  return{pts:path.reverse(),cost:dist.get(toK)};
+}
+function pathStats(fr,pts){
+  let mx=0,len=0;const g=state.graph;
+  for(let i=0;i<pts.length;i++){const[r,c]=ll2rc(pts[i][0],pts[i][1]);const d=depthAt(fr,r,c);if(d>mx)mx=d;
+    if(i>0)len+=g.hav(pts[i-1],pts[i]);}
+  return{max:mx,len};
+}
+function runRoutes(){
+  routeLayers.forEach(l=>map.removeLayer(l));routeLayers=[];
+  if(!state.origin||!state.dest)return;
+  const g=state.graph,fr=state.frames[state.hi];
+  const near=k=>{let bk=null,bd=1e18;for(const key of g.nodes.keys()){const p=g.nodes.get(key);
+    const d=(p[0]-k[0])**2+(p[1]-k[1])**2;if(d<bd){bd=d;bk=key;}}return bk;};
+  const oK=near(state.origin),dK=near(state.dest);
+  const norm=route(g,fr,oK,dK,false),safe=route(g,fr,oK,dK,true);
+  let html="";
+  if(norm){const s=pathStats(fr,norm.pts);const[cls]=riskOf(s.max);
+    routeLayers.push(L.polyline(norm.pts,{color:"#8a93a3",weight:5,opacity:0.9,dashArray:"8 6"}).addTo(map));
+    html+=`<span class="norm">Normal: ${(s.len/1000).toFixed(2)} km · worst water ${fmtD(s.max)}</span><br>`;}
+  else html+="Normal route: not found.<br>";
+  if(safe){const s=pathStats(fr,safe.pts);
+    routeLayers.push(L.polyline(safe.pts,{color:"#1a7f4b",weight:5,opacity:0.95}).addTo(map));
+    html+=`<span class="safe">Flood-aware: ${(s.len/1000).toFixed(2)} km · worst water ${fmtD(s.max)}</span>`;}
+  else html+=`<span style="color:var(--danger);font-weight:700">No safe route — all road options cross ≥30 cm water. Wait or seek high ground.</span>`;
+  $("rOut").innerHTML=html;
+}
+map.on("click",e=>{
+  const{lat,lng}=e.latlng;
+  if(state.mode==="org"||state.mode==="dst"){
+    odMarkers.forEach(m=>{if((state.mode==="org")=== (m===odMarkers[0]))map.removeLayer(m);});
+    const mk=L.marker([lat,lng],{title:state.mode}).addTo(map);
+    odMarkers=state.mode==="org"?[mk,odMarkers[1]].filter(Boolean):[odMarkers[0],mk].filter(Boolean);
+    if(state.mode==="org")state.origin=[lat,lng];else state.dest=[lat,lng];
+    state.mode=null;$("bOrg").classList.remove("on");$("bDst").classList.remove("on");
+    $("bGo").disabled=!(state.origin&&state.dest);return;
+  }
+  const[r,c]=ll2rc(lat,lng);
+  if(r<0||c<0||r>=NY||c>=NX)return;
+  state.sel=[r,c];
+  if(selMarker)map.removeLayer(selMarker);
+  selMarker=L.circleMarker([lat,lng],{radius:7,color:"#0e1e33",weight:2,fillColor:"#ffd54d",fillOpacity:1}).addTo(map);
+  const nr=nearestRoad(lat,lng);
+  $("mRoad").textContent=nr?`Nearest road: ${nr.feat}`:"Outside mapped roads.";
+  updateMetrics();
+});
+$("bOrg").onclick=()=>{state.mode="org";$("bOrg").classList.add("on");$("bDst").classList.remove("on");};
+$("bDst").onclick=()=>{state.mode="dst";$("bDst").classList.add("on");$("bOrg").classList.remove("on");};
+$("bGo").onclick=runRoutes;
+$("bClr").onclick=()=>{routeLayers.forEach(l=>map.removeLayer(l));routeLayers=[];odMarkers.forEach(m=>map.removeLayer(m));odMarkers=[];state.origin=state.dest=null;$("bGo").disabled=true;$("rOut").textContent="Pick origin & destination on the map, then Find routes.";};
+$("horizon").oninput=()=>{$("horizonLab").textContent=LEADS[+$("horizon").value]===0?"NOW":"+"+LEADS[+$("horizon").value]+" min";
+  state.hi=+$("horizon").value;drawHeat();updateMetrics();if(state.origin&&state.dest)runRoutes();
+  history.replaceState(null,"","?storm="+state.storm+"&h="+state.hi);};
+let playT=null;
+$("bPlay").onclick=()=>{
+  if(playT){clearInterval(playT);playT=null;$("bPlay").textContent="▶ Simulate flood";return;}
+  if(state.hi>=LEADS.length-1){$("horizon").value=0;}
+  $("bPlay").textContent="⏸ Pause";
+  playT=setInterval(()=>{
+    const h=+$("horizon").value+1;
+    if(h>LEADS.length-1){clearInterval(playT);playT=null;$("bPlay").textContent="▶ Simulate flood";return;}
+    $("horizon").value=h;$("horizon").dispatchEvent(new Event("input"));
+  },900);
+};
+async function loadStorm(i){
+  state.storm=i;const name=STORMS[i];
+  const meta=await(await fetch("planner/storms/"+name+"/meta.json")).json();
+  state.meta=meta;
+  const frames=[];
+  for(const L of meta.leads_min){
+    const fn=L===0?"depth_now.bin":`depth_${L}.bin`;
+    const buf=await(await fetch(`planner/storms/${name}/${fn}`)).arrayBuffer();
+    const a=new Int16Array(buf),f=new Float32Array(NX*NY);
+    for(let k=0;k<NX*NY;k++)f[k]=a[k]/1000;
+    frames.push(f);
+  }
+  state.frames=frames;drawHeat();updateMetrics();if(state.origin&&state.dest)runRoutes();
+}
+$("storm").onchange=()=>loadStorm(+$("storm").value);
+(async function init(){
+  const q=new URLSearchParams(location.search);
+  const roads=await(await fetch("data/roads.geojson")).json();
+  const campus=await(await fetch("data/campus.geojson")).json();
+  L.geoJSON(campus.features.filter(f=>(f.geometry||{}).type==="Polygon"||(f.geometry||{}).type==="MultiPolygon"),
+    {style:{color:"#0e6655",weight:2,fillOpacity:0.04}}).addTo(map);
+  const rc=L.geoJSON(roads,{style:{color:"#2c3e50",weight:3,opacity:0.9}}).addTo(map);
+  map.fitBounds(rc.getBounds().pad(0.15));
+  state.graph=buildGraph(roads);
+  STORMS.forEach((s,i)=>{
+    const o=document.createElement("option");o.value=i;
+    o.textContent=s==="storm-a-val00213"?"Monsoon burst · 40mm/1.8h (model)":"Heavy cell · 103mm/5h (model)";
+    $("storm").appendChild(o);});
+  if(q.get("storm")&&+q.get("storm")<STORMS.length){$("storm").value=q.get("storm");}
+  if(q.get("h")&&+q.get("h")<=9){$("horizon").value=q.get("h");$("horizon").dispatchEvent(new Event("input"));}
+  await loadStorm(+$("storm").value);
+  state.hi=+$("horizon").value;
+  $("horizonLab").textContent=LEADS[state.hi]===0?"NOW":"+"+LEADS[state.hi]+" min";
+  drawHeat();
+  if(q.get("selftest")){
+    const fr=state.frames[state.hi];let bi=0;for(let k=0;k<NX*NY;k++)if(fr[k]>fr[bi])bi=k;
+    const br=Math.floor(bi/NX),bc=bi%NX;state.sel=[br,bc];
+    const[[s,w],[n,e]]=state.meta.bounds;
+    const mk=L.circleMarker([n-(br/(NY-1))*(n-s),w+(bc/(NX-1))*(e-w)],{radius:7,color:"#0e1e33",weight:2,fillColor:"#ffd54d",fillOpacity:1}).addTo(map);
+    selMarker=mk;updateMetrics();
+    state.origin=[28.7540,77.4970];state.dest=[28.7510,77.5000];
+    if(state.graph.main.length===2){state.origin=state.graph.main[0];state.dest=state.graph.main[1];}
+    runRoutes();
+  }
+})();
+</script>
+</body>
+</html>

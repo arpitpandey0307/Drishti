@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Drishti Flood Nowcast — SIH 26085 (live model demo)</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#0e1626;color:#eaf0f8}
+.wrap{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:22px;margin:0 0 2px} p.sub{color:#9fb0c8;font-size:13px;margin:0 0 12px}
+.warn{background:#3a2a1a;border:1px solid #9a593e;border-radius:8px;padding:8px 12px;font-size:12px;margin:0 0 12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 10px;align-items:end}
+label{font-size:12px;color:#9fb0c8;display:block} select,input,button{font-size:14px;padding:6px 10px;border-radius:8px;border:1px solid #2a3d5e;background:#16233c;color:#fff}
+button{background:#1f6feb;border-color:#1f6feb;cursor:pointer} button:disabled{opacity:.5}
+canvas{width:100%;border:1px solid #2a3d5e;border-radius:12px;background:#0a0f15}
+#stats{font-family:monospace;font-size:13px;background:#16233c;border-radius:8px;padding:10px;white-space:pre-wrap}
+.foot{font-size:11px;color:#5f7191;margin-top:10px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+<h1>Drishti Flood Nowcast — live model</h1>
+<p class="sub">SIH 26085 · Baseline U-Net (476k params) runs <b>in your browser</b> via ONNX · free HF static hosting</p>
+<div class="warn">SYNTHETIC drainage / demo only — flood depths are model output on unverified terrain-inferred drains, never observed flooding.</div>
+<div class="row">
+<div><label>Demo window</label><select id="win"></select></div>
+<div><label>Lead time</label><select id="lead"></select></div>
+<div><label>Start row,col</label><input id="start" value="20,20" size="9"/></div>
+<div><label>End row,col</label><input id="end" value="90,140" size="9"/></div>
+<div><button id="run">Predict + route</button></div>
+</div>
+<div id="status" class="sub">loading model…</div>
+<canvas id="map" width="640" height="440"></canvas>
+<div id="stats">press Predict + route</div>
+<div class="foot">Weights: <a href="https://huggingface.co/Aman34243/drishti-flood-nowcaster" style="color:#4aa3df">Aman34243/drishti-flood-nowcaster</a> · Grid 110×160 @5m · Leads 5–180 min</div>
+</div>
+<script>
+const NY=110, NX=160, CH=36, NL=9;
+let META, session, XCUR=null;
+const $=id=>document.getElementById(id);
+async function init(){
+  const q=new URLSearchParams(location.search);
+  META=await(await fetch("windows/meta.json")).json();
+  META.windows.forEach((w,i)=>{const o=document.createElement("option");o.value=i;o.textContent=`${w.sid} @t0=${w.t0}`;$("win").appendChild(o);});
+  META.leads_min.forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=`+${m} min`;if(m===(+q.get("lead")||30))o.selected=true;$("lead").appendChild(o);});
+  if(q.get("window")&&+q.get("window")<META.windows.length)$("win").value=q.get("window");
+  session=await ort.InferenceSession.create("drishti.onnx");
+  $("status").textContent="model ready — press Predict + route";
+}
+function astar(depth,valid,s,e){
+  const ok=(r,c)=>r>=0&&c>=0&&r<NY&&c<NX&&valid[r*NX+c]&&depth[r*NX+c]<0.05;
+  if(!ok(...s)||!ok(...e))return{path:[],len:0,blocked:true};
+  const open=[[0,s]],came=new Map([[s.join(),null]]),gs=new Map([[s.join(),0]]);
+  const key=p=>p.join();
+  while(open.length){
+    open.sort((a,b)=>a[0]-b[0]);
+    const[,cur]=open.shift();
+    if(cur[0]===e[0]&&cur[1]===e[1])break;
+    for(const[dr,dc,w]of[[1,0,5],[-1,0,5],[0,1,5],[0,-1,5],[1,1,7.07],[1,-1,7.07],[-1,1,7.07],[-1,-1,7.07]]){
+      const nr=cur[0]+dr,nc=cur[1]+dc,k=nr+","+nc;
+      if(ok(nr,nc)&&!gs.has(k)){gs.set(k,gs.get(key(cur))+w);
+        open.push([gs.get(k)+Math.abs(nr-e[0])*5+Math.abs(nc-e[1])*5,[nr,nc]]);came.set(k,cur);}
+    }
+  }
+  if(!came.has(key(e)))return{path:[],len:0,blocked:true};
+  const path=[];let cur=e;
+  while(cur){path.push(cur);cur=came.get(key(cur));}
+  return{path:path.reverse(),len:gs.get(key(e)),blocked:false};
+}
+function depthColor(d){ // metres -> rgb (0..50cm Blues)
+  const t=Math.max(0,Math.min(1,d/0.5));
+  return[10+20*t,40+60*t,60+190*t];
+}
+$("run").onclick=async()=>{
+  $("run").disabled=true;$("status").textContent="running inference…";
+  try{
+    const wi=+$("win").value, li=META.leads_min.indexOf(+$("lead").value);
+    const w=META.windows[wi];
+    const buf=await(await fetch("windows/"+w.file)).arrayBuffer();
+    const x=new Float32Array(buf);
+    const out=await session.run({input:new ort.Tensor("float32",x,[1,CH,NY,NX])});
+    const Y=out.depth.data, lead=Y.slice(li*NY*NX,(li+1)*NY*NX);
+    const s=$("start").value.split(",").map(Number), e=$("end").value.split(",").map(Number);
+    const valid=new Uint8Array(NY*NX).fill(1);
+    const r=astar(lead,valid,s,e);
+    const cv=$("map"),ctx=cv.getContext("2d"),img=ctx.createImageData(NX,NY);
+    for(let k=0;k<NY*NX;k++){const[c0,c1,c2]=depthColor(Math.max(0,lead[k]));img.data[4*k]=c0;img.data[4*k+1]=c1;img.data[4*k+2]=c2;img.data[4*k+3]=255;}
+    const off=document.createElement("canvas");off.width=NX;off.height=NY;
+    off.getContext("2d").putImageData(img,0,0);
+    ctx.imageSmoothingEnabled=false;ctx.drawImage(off,0,0,cv.width,cv.height);
+    const sx=v=>v/NX*cv.width, sy=v=>v/NY*cv.height;
+    ctx.strokeStyle="#ff3b30";ctx.lineWidth=2;ctx.beginPath();
+    r.path.forEach(([pr,pc],i)=>i?ctx.lineTo(sx(pc),sy(pr)):ctx.moveTo(sx(pc),sy(pr)));ctx.stroke();
+    ctx.fillStyle="#3dff73";ctx.beginPath();ctx.arc(sx(s[1]),sy(s[0]),5,0,7);ctx.fill();
+    ctx.fillStyle="#ff3b30";ctx.beginPath();ctx.arc(sx(e[1]),sy(e[0]),5,0,7);ctx.fill();
+    let mx=0,fl=0;for(let k=0;k<NY*NX;k++){const d=Math.max(0,lead[k]);if(d>mx)mx=d;if(d>=0.05)fl++;}
+    $("stats").textContent=`window ${w.sid} t0=${w.t0} lead +${META.leads_min[li]}min\nmax_depth ${(mx).toFixed(3)} m · flooded cells ${fl} (${(fl*25).toLocaleString()} m²)\nroute ${r.blocked?"BLOCKED":"ok "+r.len.toFixed(0)+" m · "+r.path.length+" cells"} (${s} → ${e})`;
+    history.replaceState(null,"",`?window=${wi}&lead=${META.leads_min[li]}`);
+    $("status").textContent="done";
+  }catch(err){$("status").textContent="error: "+err.message;}
+  $("run").disabled=false;
+};
+init();
+</script>
+</body>
+</html>

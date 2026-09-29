@@ -1,0 +1,23 @@
+# Simulation + dataset runs.
+simulation:
+  dt_output_min: 5
+  mass_balance_tol: 0.05             # 5% relative error allowed
+  nan_policy: "fail"
+  simulator_version: "1.0"           # physics engine version (diffusive storage-cell + Manning pipes)
+dataset:
+  format: "hdf5"
+  out_dir: "outputs/datasets"
+  version: "1.0"                     # dataset release version (v1.0 = stratified prod + OOD)
+  test_n: 10                         # legacy v0 suite (kiet_flood_test.h5, keep for viewer)
+  val_n: 100
+  prod_n: 1000                       # aspirational ceiling for Colab-scale runs
+  v1_prod_n: 240                      # v1.0 local-scale prod pool (70/15/15 -> train/val/test)
+  v1_ood_n: 36                        # v1.0 OOD pool (dataset/ood/)
+  seed: 26085
+  network_variants: 6                # distinct synthetic networks for uncertainty (v1.0)
+  blockage_sampler: "balanced_quotas" # v1.0: level quotas x round-robin modes
+  rainfall_sampler: "stratified_lhs"  # v1.0: class quotas + Latin-Hypercube(duration, sigma, speed)
+validation:
+  flood_depth_cap_m: 2.0
+  velocity_cap_mps: 3.0
+  mass_err_quarantine: 0.35          # scenarios above this are quarantined, never trained on

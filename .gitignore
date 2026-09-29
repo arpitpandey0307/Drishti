@@ -1,0 +1,39 @@
+# redundant source zips (extracted folders are tracked instead)
+*.zip
+kiet_real_terrain_package.zip
+kiet_campus_map_reconstruction.zip
+# python cache
+__pycache__/
+# local server logs
+*.log
+# raw WhatsApp photos + per-image notes (local only, derived GeoJSON is tracked)
+kiet_campuse_data/
+kiet_campus_data/
+# local agent instructions (tracked already — ignore only affects untracked)
+AGENT.md
+
+# generated simulation + viz outputs (local only) — except the shipped demo bank
+outputs/*
+!outputs/viz-demo
+
+# large raw rasters (runtime uses data/terrain_grid.json + kiet_terrain/campus_osm.geojson)
+*.tif
+kiet_terrain/data/
+# legacy experiment leftovers (not imported anywhere: terrain/, flood/, synthetic/, drainage/)
+terrain/
+flood/
+synthetic/
+drainage/
+# generated ML artefacts (weights on HF: Aman34243/drishti-flood-nowcaster)
+*.h5
+*.pt
+*.onnx
+*.onnx.data
+# hosted Space binaries (fetch from HF Space; see space/README.md)
+space/windows/*.bin
+# python/build caches
+.pytest_cache/
+.mypy_cache/
+
+# local machine / agent notes
+environment.md

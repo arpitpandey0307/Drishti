@@ -1,0 +1,29 @@
+# Synthetic drainage network — EVERYTHING here is inferred, verified=false.
+target_inlets: 60
+inlet_spacing_m: 15.0
+placement:
+  road_buffer_m: 6.0
+  low_point_bonus: true
+  avoid_buildings: true
+pipes:
+  diameters_m: [0.3, 0.45, 0.6, 0.8, 1.0, 1.2]
+  default_diameter_m: 0.6
+  trunk_diameter_m: 1.0
+  manning_n: 0.013          # concrete pipe (Chow 1959)
+  min_slope: 0.002
+  max_slope: 0.05
+  max_length_m: 120.0
+nodes:
+  rim_offset_m: 0.0         # rim = ground elevation
+  depth_m: 1.5              # invert = ground - depth
+  storage_area_m2: 1.0      # manhole plan area for head computation
+  inlet_capacity_m3s: 0.05  # max surface->pipe transfer per inlet
+outfalls:
+  count: 2
+  location: "NE low edge (lowest rim elevations)"
+uncertainty:                # sampled per scenario/network-variant
+  diameter_choices_m: [0.3, 0.45, 0.6, 0.8, 1.0]
+  roughness_range: [0.011, 0.017]
+  inlet_capacity_range_m3s: [0.02, 0.10]
+  slope_noise: 0.15
+  position_jitter_m: 5.0

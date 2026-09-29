@@ -1,0 +1,9 @@
+name,lat,lon,floors,area,source
+A,28.75315,77.49713,G+2,2056.5,campus_accurate
+B,28.7524,77.49808,G+3,450,campus_accurate
+C,28.75229,77.49778,G+?,270,campus_accurate
+D,28.75209,77.49985,G+2,900,campus_accurate
+E,28.75216,77.49831,G+5,1400,campus_accurate
+F,28.75163,77.49886,G+3,490.2,campus_accurate
+G,28.75292,77.49857,G+?,60,campus_accurate
+L,28.75245,77.49905,G+4,440,campus_accurate

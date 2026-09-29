@@ -1,0 +1,18 @@
+# Rainfall scenarios — plausible-synthetic Indian monsoon ranges (see source.md section 6).
+# Local CSV stats: daily max 114.59 mm, p99 ~37 mm -> event totals 10-150 mm, 1-6 h.
+duration_h:
+  min: 1.0
+  max: 6.0
+total_mm:
+  min: 10.0
+  max: 150.0
+peak_intensity_mmh:
+  max: 90.0
+timestep_min: 5
+temporal_profiles: ["uniform", "peaked", "front_loaded", "back_loaded", "multi_peak"]
+spatial_patterns: ["uniform", "gaussian_cell", "moving_cell", "gradient", "multi_cell"]
+moving_cell:
+  speed_mps: [2.0, 10.0]
+  direction_deg: [0, 360]
+gaussian_cell:
+  sigma_m: [40.0, 150.0]

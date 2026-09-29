@@ -1,0 +1,15 @@
+{
+ "bounds_latlon": [
+  [
+   28.75069444444444,
+   77.49569444444445
+  ],
+  [
+   28.754305555555554,
+   77.50125000000001
+  ]
+ ],
+ "source": "Copernicus GLO-30 30m DSM, bilinear-upsampled display only \u2014 not higher accuracy",
+ "elevation_min_m": 214.68,
+ "elevation_max_m": 231.31
+}

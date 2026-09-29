@@ -1,0 +1,2057 @@
+{
+ "type": "FeatureCollection",
+ "name": "KIET sanctioned sketch (UNVERIFIED positions, do not render)",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "Z",
+    "floors": "G+8",
+    "footprint_sqm": 748.31,
+    "confidence": "low",
+    "source": "area chart row6"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49929,
+       28.75223
+      ],
+      [
+       77.49873,
+       28.75248
+      ],
+      [
+       77.49835,
+       28.75257
+      ],
+      [
+       77.49891,
+       28.75232
+      ],
+      [
+       77.49929,
+       28.75223
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "Y",
+    "floors": "G+5",
+    "footprint_sqm": 748.31,
+    "confidence": "low",
+    "source": "14.jpeg 28.70"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49944,
+       28.75206
+      ],
+      [
+       77.49884,
+       28.75233
+      ],
+      [
+       77.4985,
+       28.7524
+      ],
+      [
+       77.49909,
+       28.75214
+      ],
+      [
+       77.49944,
+       28.75206
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "S",
+    "floors": "G+? ",
+    "footprint_sqm": 540,
+    "confidence": "low",
+    "source": "5.jpeg 534.10"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49932,
+       28.75183
+      ],
+      [
+       77.49869,
+       28.75211
+      ],
+      [
+       77.49845,
+       28.75216
+      ],
+      [
+       77.49908,
+       28.75188
+      ],
+      [
+       77.49932,
+       28.75183
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "J",
+    "floors": "G+1",
+    "footprint_sqm": 883.74,
+    "confidence": "low",
+    "source": "1.jpeg 40.17"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.50071,
+       28.75136
+      ],
+      [
+       77.49988,
+       28.75173
+      ],
+      [
+       77.49958,
+       28.7518
+      ],
+      [
+       77.50042,
+       28.75142
+      ],
+      [
+       77.50071,
+       28.75136
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "U",
+    "floors": "G+4",
+    "footprint_sqm": 360,
+    "confidence": "low",
+    "source": "14.jpeg"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49955,
+       28.75197
+      ],
+      [
+       77.49914,
+       28.75215
+      ],
+      [
+       77.4989,
+       28.7522
+      ],
+      [
+       77.49931,
+       28.75202
+      ],
+      [
+       77.49955,
+       28.75197
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "V",
+    "floors": "G+5",
+    "footprint_sqm": 1241.52,
+    "confidence": "low",
+    "source": "5.jpeg 44.34"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49968,
+       28.75198
+      ],
+      [
+       77.49876,
+       28.7524
+      ],
+      [
+       77.49838,
+       28.75248
+      ],
+      [
+       77.4993,
+       28.75207
+      ],
+      [
+       77.49968,
+       28.75198
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "X",
+    "floors": "G+1",
+    "footprint_sqm": 521.1,
+    "confidence": "low",
+    "source": "5.jpeg"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.50033,
+       28.75135
+      ],
+      [
+       77.49972,
+       28.75162
+      ],
+      [
+       77.49948,
+       28.75167
+      ],
+      [
+       77.50009,
+       28.7514
+      ],
+      [
+       77.50033,
+       28.75135
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "I",
+    "floors": "G+4",
+    "footprint_sqm": 632.88,
+    "confidence": "low",
+    "source": "14.jpeg 35.16"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49904,
+       28.75194
+      ],
+      [
+       77.49831,
+       28.75226
+      ],
+      [
+       77.49807,
+       28.75232
+      ],
+      [
+       77.4988,
+       28.75199
+      ],
+      [
+       77.49904,
+       28.75194
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "PharmaJ",
+    "floors": "G+2",
+    "footprint_sqm": 654.4,
+    "confidence": "low",
+    "source": "14.jpeg 40.90"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49873,
+       28.75208
+      ],
+      [
+       77.49788,
+       28.75246
+      ],
+      [
+       77.49766,
+       28.7525
+      ],
+      [
+       77.49852,
+       28.75213
+      ],
+      [
+       77.49873,
+       28.75208
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "Canteen",
+    "floors": "G+2",
+    "footprint_sqm": 120,
+    "confidence": "low",
+    "source": "8.jpeg 3.30"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49778,
+       28.7528
+      ],
+      [
+       77.49747,
+       28.75294
+      ],
+      [
+       77.49736,
+       28.75297
+      ],
+      [
+       77.49767,
+       28.75283
+      ],
+      [
+       77.49778,
+       28.7528
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "C1-demolish",
+    "floors": "G",
+    "footprint_sqm": 183.74,
+    "confidence": "low",
+    "source": "demolish 41.76x184.78"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.4977,
+       28.75249
+      ],
+      [
+       77.49683,
+       28.75288
+      ],
+      [
+       77.49677,
+       28.75289
+      ],
+      [
+       77.49764,
+       28.75251
+      ],
+      [
+       77.4977,
+       28.75249
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "C1-exist",
+    "floors": "G",
+    "footprint_sqm": 84,
+    "confidence": "low",
+    "source": "covered C1 83.59"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49768,
+       28.75251
+      ],
+      [
+       77.49743,
+       28.75262
+      ],
+      [
+       77.49734,
+       28.75264
+      ],
+      [
+       77.49759,
+       28.75253
+      ],
+      [
+       77.49768,
+       28.75251
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "W",
+    "floors": "G+?",
+    "footprint_sqm": 96,
+    "confidence": "low",
+    "source": "covered W 45.66"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49954,
+       28.752
+      ],
+      [
+       77.49929,
+       28.75211
+      ],
+      [
+       77.49918,
+       28.75214
+      ],
+      [
+       77.49943,
+       28.75202
+      ],
+      [
+       77.49954,
+       28.752
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "X1",
+    "floors": "G+?",
+    "footprint_sqm": 60,
+    "confidence": "low",
+    "source": "covered X1 23.22"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.50036,
+       28.75137
+      ],
+      [
+       77.50015,
+       28.75146
+      ],
+      [
+       77.50007,
+       28.75148
+      ],
+      [
+       77.50028,
+       28.75138
+      ],
+      [
+       77.50036,
+       28.75137
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "sanctioned_building",
+    "sanctioned_name": "Y1",
+    "floors": "G+?",
+    "footprint_sqm": 60,
+    "confidence": "low",
+    "source": "covered Y1 27.54"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49947,
+       28.75206
+      ],
+      [
+       77.49926,
+       28.75216
+      ],
+      [
+       77.49918,
+       28.75217
+      ],
+      [
+       77.49939,
+       28.75208
+      ],
+      [
+       77.49947,
+       28.75206
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-A",
+    "area_sqm": 1753.14,
+    "confidence": "medium",
+    "source": "1.jpeg parking front 1753.14"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49859,
+       28.7526
+      ],
+      [
+       77.49765,
+       28.75302
+      ],
+      [
+       77.49713,
+       28.75313
+      ],
+      [
+       77.49807,
+       28.75271
+      ],
+      [
+       77.49859,
+       28.7526
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-B",
+    "area_sqm": 278.4,
+    "confidence": "medium",
+    "source": "1.jpeg parking B 45.67x6.07"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49815,
+       28.75263
+      ],
+      [
+       77.4972,
+       28.75305
+      ],
+      [
+       77.49712,
+       28.75307
+      ],
+      [
+       77.49807,
+       28.75264
+      ],
+      [
+       77.49815,
+       28.75263
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-B1",
+    "area_sqm": 935.24,
+    "confidence": "medium",
+    "source": "1.jpeg parking B1 45.40x20.60"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.498,
+       28.75268
+      ],
+      [
+       77.49705,
+       28.75311
+      ],
+      [
+       77.49678,
+       28.75317
+      ],
+      [
+       77.49772,
+       28.75274
+      ],
+      [
+       77.498,
+       28.75268
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-D",
+    "area_sqm": 442.5,
+    "confidence": "medium",
+    "source": "1.jpeg parking D 29.50x15.00"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49921,
+       28.75209
+      ],
+      [
+       77.4986,
+       28.75236
+      ],
+      [
+       77.4984,
+       28.75241
+      ],
+      [
+       77.49901,
+       28.75213
+      ],
+      [
+       77.49921,
+       28.75209
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-E",
+    "area_sqm": 764.6,
+    "confidence": "medium",
+    "source": "1.jpeg parking E 39.21x19.50"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49946,
+       28.75196
+      ],
+      [
+       77.49864,
+       28.75233
+      ],
+      [
+       77.49838,
+       28.75238
+      ],
+      [
+       77.4992,
+       28.75202
+      ],
+      [
+       77.49946,
+       28.75196
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-F",
+    "area_sqm": 193.02,
+    "confidence": "medium",
+    "source": "1.jpeg parking F 32.17x6.00"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.4992,
+       28.75197
+      ],
+      [
+       77.49853,
+       28.75227
+      ],
+      [
+       77.49845,
+       28.75229
+      ],
+      [
+       77.49912,
+       28.75199
+      ],
+      [
+       77.4992,
+       28.75197
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-G",
+    "area_sqm": 345.0,
+    "confidence": "medium",
+    "source": "1.jpeg parking G 7.73x44.63"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49816,
+       28.75244
+      ],
+      [
+       77.498,
+       28.75251
+      ],
+      [
+       77.4974,
+       28.75264
+      ],
+      [
+       77.49756,
+       28.75257
+      ],
+      [
+       77.49816,
+       28.75244
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-H",
+    "area_sqm": 377.87,
+    "confidence": "medium",
+    "source": "1.jpeg parking H shape 377.87"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49885,
+       28.75231
+      ],
+      [
+       77.49844,
+       28.75249
+      ],
+      [
+       77.49819,
+       28.75255
+      ],
+      [
+       77.4986,
+       28.75236
+      ],
+      [
+       77.49885,
+       28.75231
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-I",
+    "area_sqm": 521.56,
+    "confidence": "medium",
+    "source": "1.jpeg parking I 11.26x46.32"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49963,
+       28.75185
+      ],
+      [
+       77.4994,
+       28.75196
+      ],
+      [
+       77.49878,
+       28.7521
+      ],
+      [
+       77.49902,
+       28.75199
+      ],
+      [
+       77.49963,
+       28.75185
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-J",
+    "area_sqm": 565.6,
+    "confidence": "medium",
+    "source": "1.jpeg parking J shape 565.60"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49995,
+       28.75167
+      ],
+      [
+       77.49943,
+       28.7519
+      ],
+      [
+       77.49914,
+       28.75196
+      ],
+      [
+       77.49966,
+       28.75173
+      ],
+      [
+       77.49995,
+       28.75167
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-L",
+    "area_sqm": 1915.03,
+    "confidence": "medium",
+    "source": "1.jpeg parking L 30.57x62.44"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49922,
+       28.75225
+      ],
+      [
+       77.49858,
+       28.75253
+      ],
+      [
+       77.49775,
+       28.75272
+      ],
+      [
+       77.49838,
+       28.75243
+      ],
+      [
+       77.49922,
+       28.75225
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-M",
+    "area_sqm": 2748.7,
+    "confidence": "medium",
+    "source": "1.jpeg parking M shape 2748.70"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.50027,
+       28.75174
+      ],
+      [
+       77.49912,
+       28.75225
+      ],
+      [
+       77.49845,
+       28.7524
+      ],
+      [
+       77.4996,
+       28.75189
+      ],
+      [
+       77.50027,
+       28.75174
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-N",
+    "area_sqm": 350.92,
+    "confidence": "medium",
+    "source": "1.jpeg parking N 25.39x17.07"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49953,
+       28.75204
+      ],
+      [
+       77.49901,
+       28.75227
+      ],
+      [
+       77.49878,
+       28.75233
+      ],
+      [
+       77.49931,
+       28.75209
+      ],
+      [
+       77.49953,
+       28.75204
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-O",
+    "area_sqm": 7820.55,
+    "confidence": "medium",
+    "source": "1.jpeg parking O shape 7820.55 south"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.50129,
+       28.75137
+      ],
+      [
+       77.499,
+       28.75239
+      ],
+      [
+       77.49805,
+       28.7526
+      ],
+      [
+       77.50034,
+       28.75158
+      ],
+      [
+       77.50129,
+       28.75137
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-P",
+    "area_sqm": 390.0,
+    "confidence": "medium",
+    "source": "1.jpeg parking P shape 390.00"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.4986,
+       28.75248
+      ],
+      [
+       77.49819,
+       28.75267
+      ],
+      [
+       77.49793,
+       28.75272
+      ],
+      [
+       77.49835,
+       28.75254
+      ],
+      [
+       77.4986,
+       28.75248
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-Q",
+    "area_sqm": 539.6,
+    "confidence": "medium",
+    "source": "1.jpeg parking Q shape 539.60"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49843,
+       28.75254
+      ],
+      [
+       77.49797,
+       28.75274
+      ],
+      [
+       77.49765,
+       28.75282
+      ],
+      [
+       77.49811,
+       28.75261
+      ],
+      [
+       77.49843,
+       28.75254
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "parking",
+    "sanctioned_name": "P-R",
+    "area_sqm": 290.4,
+    "confidence": "medium",
+    "source": "1.jpeg parking R shape 290.40"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49826,
+       28.7526
+      ],
+      [
+       77.49789,
+       28.75277
+      ],
+      [
+       77.49767,
+       28.75282
+      ],
+      [
+       77.49805,
+       28.75265
+      ],
+      [
+       77.49826,
+       28.7526
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-33KW",
+    "confidence": "medium",
+    "source": "solar 289 top"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49773,
+       28.75246
+      ],
+      [
+       77.49711,
+       28.75274
+      ],
+      [
+       77.497,
+       28.75276
+      ],
+      [
+       77.49763,
+       28.75249
+      ],
+      [
+       77.49773,
+       28.75246
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-44-8KW",
+    "confidence": "medium",
+    "source": "solar 288 top"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49732,
+       28.75265
+      ],
+      [
+       77.4968,
+       28.75288
+      ],
+      [
+       77.49669,
+       28.7529
+      ],
+      [
+       77.49721,
+       28.75267
+      ],
+      [
+       77.49732,
+       28.75265
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-100KW",
+    "confidence": "medium",
+    "source": "solar 288 top"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49659,
+       28.75297
+      ],
+      [
+       77.49597,
+       28.75325
+      ],
+      [
+       77.49586,
+       28.75327
+      ],
+      [
+       77.49648,
+       28.753
+      ],
+      [
+       77.49659,
+       28.75297
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-15KW",
+    "confidence": "medium",
+    "source": "solar 337.48/184.46"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49597,
+       28.75325
+      ],
+      [
+       77.49545,
+       28.75348
+      ],
+      [
+       77.49534,
+       28.75351
+      ],
+      [
+       77.49586,
+       28.75327
+      ],
+      [
+       77.49597,
+       28.75325
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-80KW",
+    "confidence": "medium",
+    "source": "solar west 80"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.5001,
+       28.75154
+      ],
+      [
+       77.49969,
+       28.75173
+      ],
+      [
+       77.49955,
+       28.75175
+      ],
+      [
+       77.49997,
+       28.75157
+      ],
+      [
+       77.5001,
+       28.75154
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-49KW",
+    "confidence": "medium",
+    "source": "solar 49"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49999,
+       28.75163
+      ],
+      [
+       77.49962,
+       28.7518
+      ],
+      [
+       77.49948,
+       28.75183
+      ],
+      [
+       77.49986,
+       28.75166
+      ],
+      [
+       77.49999,
+       28.75163
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-20KW",
+    "confidence": "medium",
+    "source": "solar 20"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49955,
+       28.7518
+      ],
+      [
+       77.49921,
+       28.75195
+      ],
+      [
+       77.49908,
+       28.75198
+      ],
+      [
+       77.49941,
+       28.75183
+      ],
+      [
+       77.49955,
+       28.7518
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-60KW",
+    "confidence": "medium",
+    "source": "solar 60"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.50021,
+       28.7517
+      ],
+      [
+       77.49987,
+       28.75185
+      ],
+      [
+       77.49974,
+       28.75188
+      ],
+      [
+       77.50007,
+       28.75173
+      ],
+      [
+       77.50021,
+       28.7517
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-40KW",
+    "confidence": "medium",
+    "source": "solar 40 south"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49859,
+       28.75258
+      ],
+      [
+       77.49817,
+       28.75276
+      ],
+      [
+       77.49804,
+       28.75279
+      ],
+      [
+       77.49845,
+       28.75261
+      ],
+      [
+       77.49859,
+       28.75258
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "solar",
+    "sanctioned_name": "Solar-93-72KW",
+    "confidence": "medium",
+    "source": "solar west 93-72"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.50119,
+       28.75121
+      ],
+      [
+       77.50067,
+       28.75144
+      ],
+      [
+       77.50051,
+       28.75147
+      ],
+      [
+       77.50103,
+       28.75124
+      ],
+      [
+       77.50119,
+       28.75121
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "road_sanctioned",
+    "sanctioned_name": "R1",
+    "width_m": 6.0,
+    "confidence": "medium",
+    "source": "6M grid N-S"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49761,
+       28.75303
+      ],
+      [
+       77.49512,
+       28.75414
+      ],
+      [
+       77.49504,
+       28.75416
+      ],
+      [
+       77.49753,
+       28.75304
+      ],
+      [
+       77.49761,
+       28.75303
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "road_sanctioned",
+    "sanctioned_name": "R2",
+    "width_m": 7.5,
+    "confidence": "medium",
+    "source": "7.5M spine"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49701,
+       28.75316
+      ],
+      [
+       77.49431,
+       28.75437
+      ],
+      [
+       77.49421,
+       28.75439
+      ],
+      [
+       77.49691,
+       28.75318
+      ],
+      [
+       77.49701,
+       28.75316
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "road_sanctioned",
+    "sanctioned_name": "R3",
+    "width_m": 3.0,
+    "confidence": "medium",
+    "source": "3M service canteen"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49691,
+       28.75318
+      ],
+      [
+       77.49483,
+       28.75411
+      ],
+      [
+       77.49479,
+       28.75412
+      ],
+      [
+       77.49687,
+       28.75319
+      ],
+      [
+       77.49691,
+       28.75318
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "road_sanctioned",
+    "sanctioned_name": "R4",
+    "width_m": 200,
+    "confidence": "medium",
+    "source": "NH-58 45M frontage E"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49764,
+       28.75304
+      ],
+      [
+       77.49744,
+       28.75314
+      ],
+      [
+       77.49476,
+       28.75373
+      ],
+      [
+       77.49497,
+       28.75363
+      ],
+      [
+       77.49764,
+       28.75304
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "road_sanctioned",
+    "sanctioned_name": "R5",
+    "width_m": 8,
+    "confidence": "medium",
+    "source": "Railway Lane N"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.49716,
+       28.75266
+      ],
+      [
+       77.49404,
+       28.75405
+      ],
+      [
+       77.49393,
+       28.75408
+      ],
+      [
+       77.49705,
+       28.75268
+      ],
+      [
+       77.49716,
+       28.75266
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "boundary_khasra",
+    "sanctioned_name": "KIET-khasra-280-282-286",
+    "confidence": "medium",
+    "source": "13.jpeg khasra"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       77.5,
+       28.75138
+      ],
+      [
+       77.49584,
+       28.75323
+      ],
+      [
+       77.49611,
+       28.75317
+      ],
+      [
+       77.49528,
+       28.75354
+      ],
+      [
+       77.49781,
+       28.75298
+      ],
+      [
+       77.49906,
+       28.75242
+      ],
+      [
+       77.49866,
+       28.75251
+      ],
+      [
+       77.5024,
+       28.75084
+      ],
+      [
+       77.5,
+       28.75138
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "Z",
+    "floors": "G+8",
+    "lat": 28.7524,
+    "lon": 77.49882
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49882,
+     28.7524
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "Y",
+    "floors": "G+5",
+    "lat": 28.75223,
+    "lon": 77.49897
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49897,
+     28.75223
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "S",
+    "floors": "G+? ",
+    "lat": 28.752,
+    "lon": 77.49889
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49889,
+     28.752
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "J",
+    "floors": "G+1",
+    "lat": 28.75158,
+    "lon": 77.50015
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.50015,
+     28.75158
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "U",
+    "floors": "G+4",
+    "lat": 28.75209,
+    "lon": 77.49922
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49922,
+     28.75209
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "V",
+    "floors": "G+5",
+    "lat": 28.75223,
+    "lon": 77.49903
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49903,
+     28.75223
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "X",
+    "floors": "G+1",
+    "lat": 28.75151,
+    "lon": 77.4999
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.4999,
+     28.75151
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "I",
+    "floors": "G+4",
+    "lat": 28.75213,
+    "lon": 77.49855
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49855,
+     28.75213
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "PharmaJ",
+    "floors": "G+2",
+    "lat": 28.75229,
+    "lon": 77.4982
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.4982,
+     28.75229
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "Canteen",
+    "floors": "G+2",
+    "lat": 28.75288,
+    "lon": 77.49757
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49757,
+     28.75288
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "C1-demolish",
+    "floors": "G",
+    "lat": 28.75269,
+    "lon": 77.49724
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49724,
+     28.75269
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "C1-exist",
+    "floors": "G",
+    "lat": 28.75258,
+    "lon": 77.49751
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49751,
+     28.75258
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "W",
+    "floors": "G+?",
+    "lat": 28.75207,
+    "lon": 77.49936
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49936,
+     28.75207
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "X1",
+    "floors": "G+?",
+    "lat": 28.75142,
+    "lon": 77.50021
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.50021,
+     28.75142
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "label_accurate",
+    "sanctioned_name": "Y1",
+    "floors": "G+?",
+    "lat": 28.75212,
+    "lon": 77.49932
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     77.49932,
+     28.75212
+    ]
+   }
+  }
+ ]
+}

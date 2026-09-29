@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>KIET Campus 3D Terrain</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,sans-serif}
+  #app{position:fixed;inset:0}
+  #panel{position:fixed;top:10px;left:10px;background:rgba(255,255,255,.94);border-radius:10px;padding:10px 12px;font-size:13px;box-shadow:0 2px 10px rgba(0,0,0,.25);max-width:250px;z-index:10}
+  #panel h3{margin:0 0 6px;font-size:14px}
+  #panel label{display:block;margin:2px 0;cursor:pointer}
+  #panel input[type=range]{width:100%}
+  #attr{position:fixed;left:10px;bottom:10px;background:rgba(255,255,255,.9);font-size:11px;padding:4px 8px;border-radius:6px;z-index:10;max-width:70%}
+  #tip{position:fixed;display:none;background:#111;color:#fff;font-size:12px;padding:6px 9px;border-radius:6px;pointer-events:none;z-index:20;max-width:240px}
+  .lbl{position:absolute;transform:translate(-50%,-120%);background:rgba(255,255,255,.85);border:1px solid #333;border-radius:4px;font-size:11px;font-weight:600;padding:1px 5px;pointer-events:none;white-space:nowrap}
+  #labels{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+  #loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;background:#0b1020;color:#fff;z-index:50}
+  button{margin-top:6px;font-size:12px}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="app"></div>
+<div id="labels"></div>
+<div id="panel">
+  <h3>KIET 3D Terrain</h3>
+  <label>Vertical exaggeration: <b id="exv">3.0×</b></label>
+  <input id="ex" type="range" min="1" max="6" step="0.5" value="3"/>
+  <label>Style: <select id="style"><option value="both" selected>Mesh + Solid</option><option value="mesh">Mesh only</option><option value="solid">Solid only</option></select></label>
+  <label><input type="checkbox" data-l="main" checked/> Main roads (NH-34)</label>
+  <label><input type="checkbox" data-l="internal" checked/> Internal roads</label>
+  <label><input type="checkbox" data-l="foot" checked/> Footpaths</label>
+  <label><input type="checkbox" data-l="bld" checked/> Buildings</label>
+  <label><input type="checkbox" data-l="cont" checked/> Contours 2m</label>
+  <label><input type="checkbox" data-l="low" checked/> Low pockets</label>
+  <label><input type="checkbox" data-l="lbl" checked/> Labels</label>
+  <label><input type="checkbox" id="rot"/> Auto-rotate</label>
+  <button id="reset">Reset view</button>
+  <div style="margin-top:6px;font-size:11px;color:#555">Click terrain for elevation.<br/>DSM 30m ±4m — broad relief only.</div>
+</div>
+<div id="attr">Terrain: Copernicus GLO-30 DSM · Roads/buildings © OpenStreetMap contributors · Building heights estimated</div>
+<div id="tip"></div>
+<div id="loading">Loading terrain…</div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+const data = await fetch('data/terrain_3d.json').then(r=>{if(!r.ok)throw 0;return r.json();}).catch(()=>null);
+if(!data){ const isFile=location.protocol==='file:';
+  document.getElementById('loading').innerHTML=isFile
+    ? 'This page was opened as a file — browsers block data loading.<br/>Either open <b>kiet_3d_standalone.html</b> (works by double-click),<br/>or serve this folder:<br/><code>python3 -m http.server 8123</code> → <code>http://localhost:8123/kiet_3d_terrain.html</code>'
+    : 'Could not load data/terrain_3d.json — is the server rooted at the drishti folder?';
+  throw new Error('no data'); }
+const B=data.bounds, NX=data.grid.nx, NY=data.grid.ny;
+const latC=(B.lat0+B.lat1)/2, MX=111320*Math.cos(latC*Math.PI/180), MY=110540;
+const lonC=(B.lon0+B.lon1)/2, lat0=B.lat0;
+const X=lon=> (lon-lonC)*MX;
+// z relative to center (north = -z)
+const Zc=lat=> -(lat-latC)*MY;
+const E=data.grid.elev, M=data.grid.mask;
+let ex=3;
+const app=document.getElementById('app');
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight); renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+app.appendChild(renderer.domElement);
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x0e1626);
+scene.fog=new THREE.Fog(0x0e1626,1200,3500);
+const camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,1,10000);
+let emin=1e9,emax=-1e9;
+for(const r of E) for(const v of r){ if(v<emin)emin=v; if(v>emax)emax=v; }
+const TGT=new THREE.Vector3(0,emin*3,0);
+const home=new THREE.Vector3(260,emin*3+360,580);
+camera.position.copy(home);
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.target.copy(TGT); controls.enableDamping=true; controls.maxPolarAngle=Math.PI*0.49;
+scene.add(new THREE.HemisphereLight(0xbfd9ff,0x3a4a3a,0.9));
+const sun=new THREE.DirectionalLight(0xffffff,1.6); sun.position.set(-400,500,250); scene.add(sun);
+const world=new THREE.Group(); scene.add(world);
+// elevation ramp green->brown
+function ramp(t){ const c=[[45,106,79],[149,213,178],[244,226,133],[214,140,69],[139,94,60]]; t=Math.min(1,Math.max(0,t)); const p=t*(c.length-1), i=Math.min(c.length-2,Math.floor(p)), f=p-i; return c[i].map((v,k)=> (v+(c[i+1][k]-v)*f)/255 ); }
+// terrain mesh (skip faces touching invalid nodes)
+{
+  const pos=[],col=[],idx=[],idmap=new Map(); let vi=0;
+  for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){ if(!M[j][i]) continue;
+    const lon=B.lon0+(B.lon1-B.lon0)*i/(NX-1), lat=B.lat1-(B.lat1-B.lat0)*j/(NY-1);
+    pos.push(X(lon),E[j][i],Zc(lat));
+    const [r,g,b]=ramp((E[j][i]-emin)/(emax-emin)); col.push(r,g,b);
+    idmap.set(j*NX+i,vi++);
+  }
+  const id=(j,i)=>idmap.get(j*NX+i);
+  for(let j=0;j<NY-1;j++) for(let i=0;i<NX-1;i++){
+    const a=id(j,i),b=id(j,i+1),c=id(j+1,i),d=id(j+1,i+1);
+    if(a==null||b==null||c==null||d==null) continue;
+    idx.push(a,c,b, b,c,d);
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+  g.setIndex(idx); g.computeVertexNormals();
+  // mesh visual: faint solid + wireframe overlay sharing same geometry
+  window._meshParts={solid:[],wire:[]}; const meshParts=window._meshParts; window._curStyle='both';
+  window._applyStyle=function applyStyle(){
+    const curStyle=window._curStyle;
+    const showSolid=curStyle==='solid'||curStyle==='both';
+    const showWire=curStyle==='mesh'||curStyle==='both';
+    for(const o of window._meshParts.solid){ o.visible=showSolid; if(o.material){ o.material.opacity=(curStyle==='both')?o.userData.bothOp:o.userData.solidOp; } }
+    for(const o of window._meshParts.wire){ o.visible=showWire; }
+  };
+  const terrainSolidMat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,metalness:0,transparent:true,opacity:0.35});
+  const m=new THREE.Mesh(g,terrainSolidMat);
+  m.name='terrain'; m.userData.bothOp=0.35; m.userData.solidOp=1; world.add(m); window._terrain=m; meshParts.solid.push(m);
+  const terrainWireMat=new THREE.MeshBasicMaterial({color:0x22d3ee,wireframe:true,transparent:true,opacity:0.55});
+  const wm=new THREE.Mesh(g,terrainWireMat);
+  wm.name='terrain-wire'; wm.position.y=0.18; world.add(wm); window._terrainWire=wm; meshParts.wire.push(wm);
+}
+// skirt base under terrain (mesh visual: solid + edge wireframe)
+{
+  const w=(B.lon1-B.lon0)*MX, h=(B.lat1-B.lat0)*MY;
+  const base=new THREE.Mesh(new THREE.BoxGeometry(w+20,22,h+20),new THREE.MeshStandardMaterial({color:0x1c2942,roughness:1,transparent:true,opacity:0.9}));
+  base.position.y=emin-12; world.add(base); base.userData.bothOp=0.9; base.userData.solidOp=1; window._meshParts.solid.push(base);
+  const baseEdges=new THREE.LineSegments(new THREE.EdgesGeometry(base.geometry),new THREE.LineBasicMaterial({color:0x22d3ee,transparent:true,opacity:0.35}));
+  baseEdges.position.copy(base.position); world.add(baseEdges); window._meshParts.wire.push(baseEdges);
+}
+const groups={main:new THREE.Group(),internal:new THREE.Group(),foot:new THREE.Group(),bld:new THREE.Group(),cont:new THREE.Group(),low:new THREE.Group()};
+Object.values(groups).forEach(g=>world.add(g));
+const RCOL={main:0xff8c1a,internal:0xffffff,foot:0x4aa3df};
+for(const r of data.roads){
+  const pts=r.pts.map(p=>new THREE.Vector3(X(p[0]),p[2]+1.2,Zc(p[1])));
+  const g=new THREE.BufferGeometry().setFromPoints(pts);
+  const line=new THREE.Line(g,new THREE.LineBasicMaterial({color:RCOL[r.class]??0xffffff}));
+  line.userData={name:r.name||r.highway,cls:r.class};
+  groups[r.class].add(line);
+}
+for(const b of data.buildings){
+  const sh=new THREE.Shape(b.ring.map(p=>new THREE.Vector2(X(p[0]),-Zc(p[1]))));
+  const g=new THREE.ExtrudeGeometry(sh,{depth:b.h,bevelEnabled:false});
+  g.rotateX(-Math.PI/2); // shape XY -> XZ plane; extrude depth becomes +Y? adjust:
+  const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x9aa7b8,roughness:.85,metalness:.05,transparent:true,opacity:0.45}));
+  // after rotateX(-90°): shape (x,y)->(x,0,y?) -> position at base elev
+  m.position.y=b.base;
+  m.userData={name:b.name,bothOp:0.45,solidOp:0.95};
+  groups.bld.add(m); window._meshParts.solid.push(m);
+  const eg=new THREE.LineSegments(new THREE.EdgesGeometry(g,25),new THREE.LineBasicMaterial({color:0x7dd3fc,transparent:true,opacity:0.9}));
+  eg.position.y=b.base; groups.bld.add(eg); window._meshParts.wire.push(eg);
+}
+for(const c of data.contours){
+  const pts=c.pts.map(p=>new THREE.Vector3(X(p[0]),p[2]+0.8,Zc(p[1])));
+  groups.cont.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0xb366ff})));
+}
+for(const p of data.low_points){
+  const s=new THREE.Mesh(new THREE.SphereGeometry(3,12,10),new THREE.MeshStandardMaterial({color:0x2e86ff,emissive:0x0a2a66}));
+  s.position.set(X(p.lon),p.elev+2,Zc(p.lat)); s.userData={elev:p.elev}; groups.low.add(s);
+}
+// HTML labels
+const labelDiv=document.getElementById('labels');
+const labelObjs=data.labels.map(l=>{ const d=document.createElement('div'); d.className='lbl'; d.textContent=l.name; labelDiv.appendChild(d);
+  return {el:d, pos:new THREE.Vector3(X(l.lon),l.elev+14,Zc(l.lat))}; });
+function updateLabels(){ const on=document.querySelector('[data-l="lbl"]').checked;
+  world.updateMatrixWorld();
+  for(const o of labelObjs){ if(!on){o.el.style.display='none';continue;}
+    const v=o.pos.clone().applyMatrix4(world.matrixWorld);
+    const p=v.project(camera);
+    if(p.z>1){o.el.style.display='none';continue;}
+    o.el.style.display='block';
+    o.el.style.left=((p.x*0.5+0.5)*innerWidth)+'px';
+    o.el.style.top=((-p.y*0.5+0.5)*innerHeight)+'px';
+  }
+}
+// exaggeration
+function setEx(v){ ex=v; document.getElementById('exv').textContent=v.toFixed(1)+'×'; world.scale.y=v; TGT.y=emin*v; }
+document.getElementById('ex').addEventListener('input',e=>setEx(parseFloat(e.target.value)));
+setEx(3);
+// layer toggles
+document.querySelectorAll('[data-l]').forEach(cb=>cb.addEventListener('change',()=>{
+  const k=cb.getAttribute('data-l');
+  if(k==='lbl'){updateLabels();return;}
+  groups[k].visible=cb.checked;
+}));
+// mesh style toggle (mesh visual instead of solid)
+document.getElementById('style').addEventListener('change',e=>{window._curStyle=e.target.value;window._applyStyle();});
+window._applyStyle();
+document.getElementById('rot').addEventListener('change',e=>controls.autoRotate=e.target.checked);
+controls.autoRotateSpeed=0.8;
+document.getElementById('reset').addEventListener('click',()=>{camera.position.copy(home);controls.target.copy(TGT);});
+// click query
+const ray=new THREE.Raycaster(), mouse=new THREE.Vector2(), tip=document.getElementById('tip');
+renderer.domElement.addEventListener('click',e=>{
+  mouse.set((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1);
+  ray.setFromCamera(mouse,camera);
+  const hit=ray.intersectObject(window._terrain,false)[0];
+  if(hit){ const elev=(hit.point.y/ex).toFixed(1);
+    tip.style.display='block'; tip.style.left=(e.clientX+12)+'px'; tip.style.top=(e.clientY+12)+'px';
+    tip.innerHTML='<b>~'+elev+' m</b><br/>30m DSM ±4m — broad relief only';
+    clearTimeout(window._tipt); window._tipt=setTimeout(()=>tip.style.display='none',3500);
+  }
+});
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+document.getElementById('loading').style.display='none';
+(function anim(){requestAnimationFrame(anim);controls.update();renderer.render(scene,camera);updateLabels();})();
+</script>
+</body>
+</html>

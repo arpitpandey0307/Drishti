@@ -1,0 +1,246 @@
+{
+  "type": "FeatureCollection",
+  "name": "KIET screenshot-visible labeled features",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jayant Hostel",
+        "category": "hostel",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4941277,
+          28.7535748
+        ]
+      },
+      "image_pixel": {
+        "x": 480,
+        "y": 415
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BEAST A Fitness Junction",
+        "category": "fitness",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4943121,
+          28.7533161
+        ]
+      },
+      "image_pixel": {
+        "x": 505,
+        "y": 455
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KIET Group of Institutions",
+        "category": "campus anchor",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4953819,
+          28.7533484
+        ]
+      },
+      "image_pixel": {
+        "x": 650,
+        "y": 450
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KIET Football Ground",
+        "category": "sports ground",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4964516,
+          28.7535424
+        ]
+      },
+      "image_pixel": {
+        "x": 795,
+        "y": 420
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KIET FC playground",
+        "category": "sports ground",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4980009,
+          28.7539952
+        ]
+      },
+      "image_pixel": {
+        "x": 1005,
+        "y": 350
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KIET SSB Academy",
+        "category": "academy / training",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4988124,
+          28.7536071
+        ]
+      },
+      "image_pixel": {
+        "x": 1115,
+        "y": 410
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KIET Deemed To Be University",
+        "category": "academic campus",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4974107,
+          28.7529927
+        ]
+      },
+      "image_pixel": {
+        "x": 925,
+        "y": 505
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KIET Cricket Ground",
+        "category": "sports ground",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4989599,
+          28.7528956
+        ]
+      },
+      "image_pixel": {
+        "x": 1135,
+        "y": 520
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KIET Temple",
+        "category": "temple",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4977427,
+          28.7524429
+        ]
+      },
+      "image_pixel": {
+        "x": 970,
+        "y": 590
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Inn0geeks",
+        "category": "student/innovation facility",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4966729,
+          28.7521842
+        ]
+      },
+      "image_pixel": {
+        "x": 825,
+        "y": 630
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Creative Cell Room",
+        "category": "student/creative facility",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4984066,
+          28.7518608
+        ]
+      },
+      "image_pixel": {
+        "x": 1060,
+        "y": 680
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KIET School of Pharmacy",
+        "category": "school / academic facility",
+        "source": "screenshot label",
+        "confidence": "medium for label position; low for exact facility centroid"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.4981853,
+          28.7511493
+        ]
+      },
+      "image_pixel": {
+        "x": 1030,
+        "y": 790
+      }
+    }
+  ]
+}

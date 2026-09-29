@@ -1,0 +1,32 @@
+# 05 — Experiments Ledger
+
+Legend: Exp-ID = E## in chronological [INFERRED] order from `report.md` + git. Verdict quotes `report.md` §§.
+
+| Exp | Date/commit | Hypothesis | Config/params | Dataset | Result | Learned | Kept/discarded |
+|---|---|---|---|---|---|---|---|
+| E01 raw-DEM verify | report §1–2 Exp1 | Pixel formula + mask reproduce package stats | Window cols1785:1805 rows885:898, 32-vertex ray-cast | `Copernicus_DSM...DEM.tif` 41.68 MB | Window min 214.6786/max 231.3076 exact; mean 218.40 vs pkg 219.22 (1-cell edge diff, n=101 vs 100) | VERIFIED, formula confirmed; max cell = DSM building hit | Kept as `terrain_grid.json` lineage |
+| E02 slope method | report Exp2 | Horn 3×3 numpy ≈ package slope | dx 27.11 lon / 30.71 lat, az315 alt45 | same | Mine max 10.75/mean 4.54 vs pkg 14.36/5.21; MAD 1.10° interior | Broad agreement, method-dependent (GDAL edge) | Kept 3-class viz only (<3/3–8/>8°) |
+| E03 upsample display | report Exp3 | ×40 bilinear + hillshade reads well without faking truth | `zoom order=1` ×40 →800×520, contours 2 m thinned 1:2 | same | `hillshade.png` 154 KB + contours 25 lines look smooth; blockiness kept | Display-good, truth-preserved | Kept overlays + meta |
+| E04 terrain map | report §4 | Leaflet layers + click query usable | bounds [[28.75069444,77.49569444],[28.75430555,77.50125]], ±4 m label | data/*.geojson+png | `kiet_terrain_map.html` + `preview_terrain_map.png`; 4 road + terrain checks pass | Works via http.server | Kept |
+| E05 3D world | report §7 | Three.js mesh + extrude + drape reads campus | 160×104 mesh 16,640 nodes, bld 12/18 m, exagg 1–6× | `terrain_3d.json` 323 KB | Headless-Chrome 3 iters OK; `preview_3d_browser.png`; neighbour step 1.42 m | Early scary preview = NaN-triangulation artifact | Kept `kiet_3d_terrain.html` |
+| E06 file:// fix | report §8 | Embedding payload cures CORS | `build_standalone_3d.py` | same | `kiet_3d_standalone.html` 293 KB md5-identical rendering | Browsers block fetch() on file:// | Kept standalone |
+| E07 tower fix | report §9 | Footprint-scaled heights kill pillars | ≤100 m²→4 m, ≤400→8 m, default 12, hostels 18 | OSM areas | Poles gone in screenshot | Small OSM kiosks ≠ 12 m | Kept |
+| E08 stick-line fix | report §10 | Valid-mask clip kills floaters | all-4-neighbours + half-cell erosion | roads 45→30 segs, contour −33% | Before/after clean | Bbox-inside ≠ DEM-valid | Kept |
+| E09 deploy | report §11 / commits e0a8b26,c522720 | Static hosts serve repo as-is | `index.html`, vercel.json, render.yaml (no build cmd) | 15 pages 200 local | Vercel `drishti-sand` + Render `drishti-cl8r` live 200s | Root 404 needs landing; 40 MB tif must stay out | Kept both |
+| E10 accurate map | report §12 / commits 6bd5abb–21f5a50 | Affine sanctioned→WGS84 reaches 3–5 m | 6 controls, anchors 28.75257/77.49851…, G+n*3.3 m | 17 bldgs A–Z, khasra, parking 20232.12 | checks accurate/sums/roadmap/allmaps OK | Verified-only vs sketch split needed | Kept `campus_accurate.geojson` + centroids |
+| E11 label snap | commits 1ff86e5,21f5a50 | Snap to OSM/Google footprints | 8 key blocks | OSM | 0.0 m on 8 blocks | Sketch quarantined | Kept |
+| E12 flood twin v0 | report §13 / README | Diffusive+synthetic DAG conserves mass | dt 2 s, S≤0.05, 1/8 cap, Horton+dep, 3 variants ×6 blk×3 modes | 10 test, 17 MB, mass 3e-8 | 8/8 tests pass; debug trail 5 bugs fixed | Buildings=walls; DAG; no rescale | Kept `simulation/` |
+| E13 viewer v0 | report §14 | Zero-dep canvas can animate H5 | int16+b64 frames ~6 MB/scn | `outputs/viz/` 10 scn | `flood_viewer.html`; validator ALL PASSED; node#9/pipe#39 clicks verified | Needs http.server; 2D only | Kept |
+| E14 QC restyle | report §15 | QC tokens fit viewer | Manrope/Playfair/DM Mono glass 18 px | same | Search/pills/cards verified; preview refreshed | Map rendering untouched | Kept |
+| E15 dataset v1.0 | report §16 / `dataset_report.md` | Quotas+LHS+6 nets+tails balance | 240 prod+36 OOD+36 dry+48 longdry; Colab CPU 0.57 s/step; 3 preemptions | 360 rows 515 MB, mass max 1.6e-3 mean 2.8e-5 | 358 valid+2 quar; splits 227/49/48 +34 OOD; windows 2692/542/606+1861 | T4 no speedup (NumPy); resume+merge survive preemption | Kept `outputs/datasets/v1/` |
+| E16 baseline smoke | report §17 | U-Net learns anything | in36→9 leads, MSE+0.2BCE, Adam 1e-3, 30/10 scn 353/103 win 2–8 ep | subset | 0.1379→0.1363 plateau (underfit expected) | `baseline_subset30.pt` 1.9 MB | Kept |
+| E17 scale-up 100 | report §18 | Bulk preload scales | 100/49 scn 1165/542 win b16 10 ep ~13 s/ep | full100 | 0.1374→0.1362; RMSE +30 0.0482/+180 0.0485 | 227 OOM ~6.8 GB; chunk upload 40 MB+cat | Kept `baseline_full100.pt` |
+| E18 SIH demo slice | report §19 / commit 8422ab8 | v1demo + routing demo-ready | `export_viz --split v1demo --max 2` (T=51+20); A* ≥5 cm | 12-entry index | Viewer dynamic index; `test_route.py` 2/2; suite 10/10 | — | Kept |
+| E19 HF live | report §20 / commit 904c5e3 | Browser ONNX on free static | dynamo export + sidecar; 6 windows 15 MB; JS A* | Space + model repo | 200s; maxdiff 3e-07; val00213 +30 max 0.101 m 175 m² route 745 m | Single-file ONNX fixes ORT-web (`MountedFiles` err); Gradio needs PRO | Kept Space |
+| E20 lean push | report §21 / commit 8b05e53 | Fresh-clone runnable without blobs | .gitignore outputs/h5/pt/onnx/tif; `fetch_demo_data.py` HF dataset | `Aman34243/drishti-demo-data` round-trip OK | No blobs >1 MB; Vercel+Render 200s | 40 MB tif `git rm --cached` | Kept |
+| E21 planner | report §22 / commits 012d979,ed05a4c | Baked bins + road routing = end-user product | 2 storms×10 bins 744 KB; 10× penalty, ≥30 cm avoid | `planner/storms/` | Zero console errors; selftest 64 cm/DANGER 5.30 km | Demo endpoints = largest component | Kept `flood_planner.html` |
+| E22 prod sim fix | report §23 / commits 432d78b,16b2a5d | Demo bank cures prod 404 | 2 smallest bundles T=15+20 5.3 MB; `?bank=demo` 3 fetch sites | `outputs/viz-demo/` committed | Headless 2/2; prod 200s | outputs/ gitignored was root cause | Kept |
+| E23 headfull proof | report §24 / commit 844b434 | Headed Chrome proves interactivity | Xvfb+CDP play k0→4, cell [64,80], CSVs 17 rows | live viewer | ALL PASSED + screenshot | No browser-MCP (`mcp` CLI broken) | Kept log |
+| E24 landing trim | commit 60a1028 | Drop duplicate demo card | index.html −1 line | — | 6→5/6 cards (Flood Sim Env kept) | — | Kept |
+
+Total: 24 experiments (E01–E24); all DONE per report; none failed-open (E02 method-diff and E17 OOM were bounded, not abandoned).

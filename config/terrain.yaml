@@ -1,0 +1,27 @@
+# KIET digital-twin terrain config. All values are assumptions unless noted.
+domain:
+  crs_calc: "EPSG:32643"   # UTM 43N, metric. Implemented as equirectangular about campus centre (sub-m error OK)
+  crs_store: "EPSG:4326"
+  centre_lat: 28.7523
+  centre_lon: 77.4985
+  dx_m: 5.0                # fine grid resolution (upsampled from 30 m DSM -> SYNTHETIC detail)
+  nx: 160                  # ~800 m E-W (covers full boundary + margin)
+  ny: 110                  # ~550 m N-S
+dem_source:
+  file: "data/terrain_grid.json"
+  native_res_m: 30.0
+  accuracy_m: 4.0
+  kind: "DSM (includes buildings/vegetation) — NOT bare earth"
+  verified: true           # the 13x20 source values are verified; upsampled detail is synthetic
+landcover:
+  road_halfwidth_m: 4.0
+  building_source: "data/campus_accurate.geojson"  # fallback data/campus.geojson
+  road_source: "data/roads.geojson"
+  boundary_source: "kiet_terrain/campus_osm.geojson"  # authoritative OSM way 835252667 (~83k m2); screenshot boundary (~16.9k m2) kept as alternate in data/campus.geojson
+hydrology_defaults:
+  manning_road: 0.015
+  manning_open: 0.045
+  manning_building: 0.20   # blocked anyway
+  imperv_road: 1.0
+  imperv_building: 1.0
+  imperv_open: 0.35

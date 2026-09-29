@@ -1,0 +1,24 @@
+# Hydraulics + infiltration (literature-typical, NOT calibrated to KIET soils).
+surface:
+  solver: "diffusive_storage_cell"   # Bates & De Roo 2000 (LISFLOOD-FP style)
+  h_min_m: 0.001
+  h_flood_m: 0.05                    # flooded_mask threshold
+  cfl_safety: 0.4
+  dt_fixed_s: 2.0
+  dt_max_s: 5.0
+  velocity_cap_mps: 3.0
+infiltration:
+  method: "horton"                   # options: horton | scs_cn
+  horton:
+    road:   {f0_mmh: 5.0,  fc_mmh: 1.0, k_per_h: 2.0}
+    open:   {f0_mmh: 35.0, fc_mmh: 8.0, k_per_h: 2.5}
+    building: {f0_mmh: 0.0, fc_mmh: 0.0, k_per_h: 1.0}
+  scs_cn:
+    road: 98
+    open: 78
+    building: 98
+  depression_mm: {road: 1.0, open: 2.5, building: 0.0}
+pipes:
+  surcharge_head_m: 0.0              # head above rim => overflow
+  inlet_weir_c: 1.7
+blockage_levels: [0.0, 0.10, 0.25, 0.50, 0.75, 0.90]

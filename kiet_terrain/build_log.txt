@@ -1,0 +1,26 @@
+{
+  "bbox": [
+    28.7509201,
+    77.4959414,
+    28.7542239,
+    77.5010837
+  ],
+  "bbox_lonlat": [
+    77.4959414,
+    28.7509201,
+    77.5010837,
+    28.7542239
+  ],
+  "centroid": [
+    28.752790943197606,
+    77.49883075446867
+  ]
+}
+{
+  "raw_bytes": 41680243,
+  "clipped": "/home/ubuntu/kiet_terrain/data/terrain/clipped/kiet_copernicus_glo30_clipped.tif",
+  "valid_min_m": 214.67860412597656,
+  "valid_max_m": 231.30755615234375,
+  "valid_mean_m": 219.2223193359375,
+  "slope_max_deg": 14.359398866905433
+}
