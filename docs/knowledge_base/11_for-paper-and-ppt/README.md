@@ -23,10 +23,10 @@
 
 ## Figures list (path → caption suggestion)
 
-1. `preview_terrain_map.png` 692 KB — 2D terrain+roads + low pockets.
-2. `preview_3d_browser.png` 119 KB — 3D world screenshot (headless-Chrome proof).
-3. `preview_campus_zoom.png` 748 KB — campus zoom.
-4. `preview_flood_viewer_surcharge.png` 438 KB — viewer t+5:05, 21 surcharged (causal chain).
+1. `docs/images/preview_terrain_map.png` 692 KB — 2D terrain+roads + low pockets.
+2. `docs/images/preview_3d_browser.png` 119 KB — 3D world screenshot (headless-Chrome proof).
+3. `docs/images/preview_campus_zoom.png` 748 KB — campus zoom.
+4. `docs/images/preview_flood_viewer_surcharge.png` 438 KB — viewer t+5:05, 21 surcharged (causal chain).
 5. `outputs/figures/dataset_v1_distributions.png` 47 KB — 6-hist balance (rain/maxd/flood-frac/duration/blockage/sim-time).
 6. `outputs/figures/scenario_0003.png` 162 KB / `scenario_0009.png` 178 KB — 6-panel scenario (DEM/landcover/network/rain/maxd/extent).
 7. `outputs/figures/qc/*.png` ×8 — 3-panel QC (max-depth/DEM/hyetograph-vs-ponding).

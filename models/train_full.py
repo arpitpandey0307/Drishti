@@ -25,11 +25,8 @@ def load_split(h5_path, norm, max_windows=None):
                 statics.append(np.asarray(f[c][:], dtype=np.float32))
         static = np.stack(statics)
         # norm statics
-        for i, c in enumerate(
-            ["dem", "slope", "flow_accum_log", "low_points", "imperv",
-             "manning", "is_road", "is_building", "in_domain"]
-        ):
-            key = f"static.{c}" if c != "flow_accum_log" else "static.flow_accum_log"
+        for i, c in enumerate(STATIC_KEYS):
+            key = f"static.{c}"
             if key in norm:
                 m, s = norm[key]["mean"], norm[key]["std"]
                 static[i] = (static[i] - m) / (s if s > 0 else 1.0)
@@ -47,18 +44,12 @@ def load_split(h5_path, norm, max_windows=None):
             if t_max < t_min:
                 continue
             for t0 in range(t_min, t_max + 1):
-                hist = np.concatenate(
-                    [rain[t0 - HIST + 1:t0 + 1, None] if False else rain[t0 - HIST + 1:t0 + 1],
-                     depth[t0 - HIST + 1:t0 + 1],
-                     vel[t0 - HIST + 1:t0 + 1]], axis=0,
-                ) if False else None
-                # explicit: (3,H,Y,X)
+                # history stack: (3,H,Y,X)
                 h = np.stack([
                     rain[t0 - HIST + 1:t0 + 1],
                     depth[t0 - HIST + 1:t0 + 1],
                     vel[t0 - HIST + 1:t0 + 1],
                 ])  # (3,H,Y,X)
-                h_flat = h.reshape(-1, *h.shape[2:])  # (18,Y,X)
                 fut_rain = np.stack([rain[t0 + l] for l in LEADS])
                 fut_depth = np.stack([depth[t0 + l] for l in LEADS])
                 # norm dynamics
@@ -70,11 +61,7 @@ def load_split(h5_path, norm, max_windows=None):
                 if "dyn.rain" in norm:
                     m_, s_ = norm["dyn.rain"]["mean"], norm["dyn.rain"]["std"]
                     fut_rain = (fut_rain - m_) / (s_ if s_ > 0 else 1.0)
-                    h_flat = np.concatenate([static,
-                                             (h.reshape(-1, *h.shape[2:])),
-                                             fut_rain], axis=0)
-                else:
-                    h_flat = np.concatenate([static, h.reshape(-1, *h.shape[2:]), fut_rain], axis=0)
+                h_flat = np.concatenate([static, h.reshape(-1, *h.shape[2:]), fut_rain], axis=0)
                 Xs.append(h_flat)
                 Ys.append(fut_depth)
                 if max_windows and len(Xs) >= max_windows:
@@ -93,9 +80,6 @@ def main():
     norm = json.load(open("outputs/datasets/v1/normalization_train.json"
                           if os.path.exists("outputs/datasets/v1/normalization_train.json")
                           else "/tmp/stage/outputs/datasets/v1/normalization_train.json"))
-    # resolve paths under /tmp/stage if needed
-    for p in [a.train_h5, a.val_h5]:
-        pass
     t0 = time.time()
     print("loading train...", flush=True)
     X, Y = load_split(a.train_h5, norm)

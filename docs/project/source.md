@@ -110,7 +110,7 @@
 
 ## 6. Rainfall data sources (local, in-repo)
 
-- Files: `random_info/daily_rainfall_2016_2026.csv` (3652 daily rows, 2016–2026, max 114.59 mm/day, p99 ≈ 37.2 mm/day, 24 days > 50 mm); `random_info/Ghaziabad_Rainfall_2021_2025.csv`, `random_info/GPM_IMERG_Ghaziabad_Rainfall_2021_2025.csv`, `random_info/ERA5_Land_Ghaziabad_Rainfall_2021_2025.csv` (1827 rows each).
+- Files: `data/raw/rainfall/daily_rainfall_2016_2026.csv` (3652 daily rows, 2016–2026, max 114.59 mm/day, p99 ≈ 37.2 mm/day, 24 days > 50 mm); `data/raw/rainfall/Ghaziabad_Rainfall_2021_2025.csv`, `data/raw/rainfall/GPM_IMERG_Ghaziabad_Rainfall_2021_2025.csv`, `data/raw/rainfall/ERA5_Land_Ghaziabad_Rainfall_2021_2025.csv` (1827 rows each).
 - Author/Organization: unknown provenance (files as found; GPM IMERG = NASA, ERA5-Land = ECMWF/Copernicus — inferred from filenames, NOT verified).
 - What it was used for: scenario intensity/duration ranges — event totals 10–150 mm, durations 1–6 h, peak 5-min intensities up to ~90 mm/h; never presented as calibrated design storms.
 - Adopted: `config/rainfall.yaml` ranges + dataset `rainfall_total_mm` spot-checks against p99/max above.

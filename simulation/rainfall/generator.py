@@ -82,7 +82,6 @@ def generate(spec, X, Y, cfg):
         for k in range(nt):
             rain[k] = sp * tp[k]
     # normalise to total_mm mean over domain
-    mean_per_step = rain.mean(axis=(1, 2), keepdims=True) if False else None
     cur_mean = rain.mean()
     rain = rain / max(cur_mean, 1e-9) * (total / nt)
     # rain[k] is mm per step; convert convenience intensity

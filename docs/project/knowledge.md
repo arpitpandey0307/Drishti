@@ -73,7 +73,7 @@ kiet_terrain/          Copernicus package + OSM boundary (raw 40 MB tif lives he
                        the two *.zip files at root are gitignored redundancies)
 kiet_campuse_data/     16 site photos + *_info.md transcription (gitignored; derived
                        GeoJSON in data/ IS tracked) — sanctioned GDA plan Rev 6
-random_info/           rainfall CSVs + urban_drainage_network (SWMM research note, no ext.)
+data/raw/rainfall/           rainfall CSVs + urban_drainage_network (SWMM research note, no ext.)
 visualization/data_adapter/  export_viz.py + validate_viz.py (H5→browser bundles)
                        (controls/layers/viewer/animation/ are EMPTY stubs — ignore)
 tools/viz.py           matplotlib scenario PNGs (DEM/landcover/network/rain/depth/extent)
@@ -220,7 +220,7 @@ behaviourally relevant part for street flooding.
 concepts — no code copied); SWMM Ref Vol II – Hydraulics, Rossman 2017
 (Manning conduit friction, node continuity + storage, surcharge above rim);
 FHWA HDS-3 (SI Manning + circular-pipe `A=πD²/4, R=D/4` capacity); Chow 1959
-n=0.013 concrete; `random_info/urban_drainage_network` background note on
+n=0.013 concrete; `data/raw/rainfall/urban_drainage_network` background note on
 Saint-Venant vs SWMM practice.*
 
 ### 4.5 Rainfall (`rainfall/generator.py`)
@@ -236,7 +236,7 @@ multi-peak = successive cells; gaussian = isolated thunderstorm; moving =
 squall line crossing the campus (the transit is centred mid-event by
 construction); gradient = orographic/directional bias; multi-cell = scattered
 convection. No IDF curve was fitted — ranges only, never design storms.
-*Sources: in-repo CSVs (`random_info/`, provenance unknown — ranges only, §6 of
+*Sources: in-repo CSVs (`data/raw/rainfall/`, provenance unknown — ranges only, §6 of
 source.md). Realism anchor: spec totals spot-checked against p99/max.*
 
 ### 4.6 Coupling + mass (`hydraulics/simulate.py`)

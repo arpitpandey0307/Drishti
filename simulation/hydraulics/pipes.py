@@ -7,8 +7,7 @@ class DrainageState:
         self.nodes = network["nodes"]; self.edges = network["edges"]
         self.nN = len(self.nodes); self.nE = len(self.edges)
         self.inlet_cap = np.full(self.nN, float(cfg["nodes"]["inlet_capacity_m3s"]))
-        r = cfg.get("uncertainty", {}).get("inlet_capacity_range_m3s", [0.02, 0.10])
-        # per-node variation already encoded via blockage; keep base
+        # per-node variation is encoded via blockage; inlet capacity stays uniform
         self.node_depth = np.zeros(self.nN)     # m above invert
         self.node_maxdepth = np.full(self.nN, float(cfg["nodes"]["depth_m"]))
         self.pipe_flow = np.zeros(self.nE)
@@ -17,7 +16,6 @@ class DrainageState:
         self.surcharge = np.zeros(self.nN, bool)
         self.overflow = np.zeros(self.nN)
         self.discharged_m3 = 0.0
-        # node->cell map
         # node->cell map
         self.node_cell = [(n["i"], n["j"]) for n in self.nodes]
         self.is_outfall = np.array([n["kind"] == "outfall" for n in self.nodes])

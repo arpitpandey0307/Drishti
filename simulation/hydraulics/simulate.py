@@ -47,8 +47,7 @@ def simulate(twin, network, spec, hydro_cfg, rain_cfg, out_every=1,
     n_rec = int(round(rec_h * 3600.0 / dt))
     dem_use = twin.dem if dem is None else dem
     man_use = twin.manning if manning is None else manning
-    if imperv_open is not None:
-        pass  # recorded in spec for ML inputs; class map below uses twin masks
+    # imperv_open is recorded in spec for ML inputs only; class map uses twin masks
     sdt = float(hydro_cfg["surface"].get("dt_fixed_s", 2.0))
     sub = max(1, int(round(dt / sdt))); sdt = dt / sub
     dcfg = yaml.safe_load(open("config/drainage.yaml"))

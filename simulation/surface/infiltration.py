@@ -1,4 +1,4 @@
-"""Horton + SCS-CN infiltration (EPA SWMM formulations, see source.md)."""
+"""Horton + SCS-CN infiltration (EPA SWMM formulations, see docs/project/source.md)."""
 import numpy as np
 
 def horton_capacity(f0, fc, k, t_h):

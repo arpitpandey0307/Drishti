@@ -6,4 +6,4 @@
 - `terrain/processed/`, `terrain/products/` — empty; awaiting DEM build outputs.
 - `visualization/{viewer,layers,animation,controls}/__init__.py` — 0-byte stubs; only `data_adapter/` live.
 - Root zips (gitignored, local-only): `kiet_campus_map_reconstruction.zip` 3.0 MB + `kiet_real_terrain_package.zip` 41.6 MB — extracted folders tracked instead.
-- Previews root: `preview_3d_browser.png` 119 KB, `preview_3d_terrain.png` 361 KB, `preview_campus_zoom.png` 748 KB, `preview_flood_viewer_surcharge.png` 438 KB, `preview_road_map.png` 280 KB, `preview_terrain_map.png` 692 KB.
+- Previews root: `docs/images/preview_3d_browser.png` 119 KB, `docs/images/preview_3d_terrain.png` 361 KB, `docs/images/preview_campus_zoom.png` 748 KB, `docs/images/preview_flood_viewer_surcharge.png` 438 KB, `docs/images/preview_road_map.png` 280 KB, `docs/images/preview_terrain_map.png` 692 KB.

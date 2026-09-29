@@ -88,7 +88,7 @@ and add an accurate terrain map on top of the existing road map.
   (on), low pockets (on), **click-anywhere elevation query** (nearest valid 30 m cell
   within ~25 m, popup shows `~X m ±4m`), combined layer control + legend, OSM and
   Copernicus attribution, `file://` fallback alert.
-- `preview_terrain_map.png` — static combined render (this report's proof).
+- `docs/images/preview_terrain_map.png` — static combined render (this report's proof).
 - Validation: all 4 road-map checks + terrain shell/content checks + `node --check`
   pass; bundle ≈ 550 KB.
 
@@ -120,7 +120,7 @@ design, flood depth, or construction — needs LiDAR/RTK survey.
   Data smoothness verified first (max neighbor step 1.42 m — an early scary
   matplotlib preview was proven to be a NaN-triangulation artifact, not data).
 - **Verified with real headless-Chrome renders** (3 iterations for camera framing):
-  `preview_3d_browser.png` is an actual screenshot of the page, not a mockup.
+  `docs/images/preview_3d_browser.png` is an actual screenshot of the page, not a mockup.
 - Run: `python3 -m http.server 8123` → `http://localhost:8123/kiet_3d_terrain.html`
   (needs internet once for the Three.js CDN).
 
@@ -210,7 +210,7 @@ design, flood depth, or construction — needs LiDAR/RTK survey.
   Fixed along the way: b64 decoder bug, missing initial load, rain masked to domain,
   play-at-end restart, pipe hit-test 8->13px, surcharge rim-threshold (> vs >=),
   flooded counts now from quantized grids (1mm display resolution documented).
-- Preview: `preview_flood_viewer_surcharge.png` (t+5:05, 21 surcharged nodes).
+- Preview: `docs/images/preview_flood_viewer_surcharge.png` (t+5:05, 21 surcharged nodes).
 - Limits: 2D only; outputs/ gitignored (regenerate w/ 2 commands); needs http server.
 - Dataset scaling PAUSED per user instruction (test split only).
 
@@ -225,7 +225,7 @@ design, flood depth, or construction — needs LiDAR/RTK survey.
 - Map/data rendering untouched (validation still holds).
 - Browser-verified: directory search (moving→3/10), pill filters, node #9 card
   (Rim 215.4m, surcharging tag), cell card, transport, all toggles.
-- Preview refreshed: `preview_flood_viewer_surcharge.png`.
+- Preview refreshed: `docs/images/preview_flood_viewer_surcharge.png`.
 
 ## 16. Flood-ML training dataset v1.0 (Phase 3) [DONE 2026-09-06]
 - Stratified sampler (`simulation/scenarios/suite_v2.py`): rainfall class quotas

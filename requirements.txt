@@ -1,0 +1,9 @@
+numpy
+scipy
+pyyaml
+h5py
+matplotlib
+pytest
+# ML nowcaster (training / inference)
+torch
+onnxruntime

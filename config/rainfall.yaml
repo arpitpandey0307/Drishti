@@ -1,4 +1,4 @@
-# Rainfall scenarios — plausible-synthetic Indian monsoon ranges (see source.md section 6).
+# Rainfall scenarios — plausible-synthetic Indian monsoon ranges (see docs/project/source.md section 6).
 # Local CSV stats: daily max 114.59 mm, p99 ~37 mm -> event totals 10-150 mm, 1-6 h.
 duration_h:
   min: 1.0

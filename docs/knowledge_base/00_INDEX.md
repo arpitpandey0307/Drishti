@@ -3,7 +3,7 @@
 **Repo:** `/home/devdevil/development/drishti`
 **Dump created:** 2026-09-07 (UTC 2026-09-06 per task clock)
 **Method:** full filesystem scan + `git log --oneline --graph --all` (33 commits) + read of every `.py/.yaml/.md/.html` + artifact listing
-**Rule obeyed:** no existing code modified; only READ + CREATE in `project_knowledge_dump/`
+**Rule obeyed:** no existing code modified; only READ + CREATE in `docs/knowledge_base/`
 
 ## 1-page executive summary
 

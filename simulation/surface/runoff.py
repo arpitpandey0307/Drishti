@@ -8,7 +8,6 @@ import numpy as np
 def step_surface(h, dem, manning, rain_mmh, infil_mmh, drain_ms, dx, dt, h_min=0.0, blocked=None):
     """drain_ms: drainage sink in m/s (positive = leaving surface).
     blocked: bool array (buildings + outside domain) acting as no-flow walls."""
-    """drain_ms: drainage sink in m/s (positive = leaving surface)."""
     ny, nx = h.shape
     ws = dem + h
     qE = np.zeros_like(h); qS = np.zeros_like(h)
@@ -55,9 +54,6 @@ def step_surface(h, dem, manning, rain_mmh, infil_mmh, drain_ms, dx, dt, h_min=0
     dh = dt * (rain_mmh - infil_mmh) / 3600.0 / 1000.0 - dt * drain_ms + dt * Qin / (dx * dx)
     h2 = np.maximum(h + dh, 0.0)
     h2 = np.where(h2 < h_min, 0.0, h2)
-    vel = np.zeros_like(h)
-    with np.errstate(divide="ignore", invalid="ignore"):
-        vE = np.abs(qE) / np.maximum(hf.mean() if False else 1.0, 1e-9)
     # cheap velocity proxy for ML features
     vmag = np.abs(Qin) / np.maximum(np.maximum(h2, h) * dx, 1e-9)
     vel = np.clip(np.nan_to_num(vmag, nan=0.0, posinf=0.0, neginf=0.0), 0, 3.0)

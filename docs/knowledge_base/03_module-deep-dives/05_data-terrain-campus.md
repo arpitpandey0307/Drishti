@@ -39,7 +39,7 @@
 - `colab_generation.ipynb` — `run_v2 --prod-n 240 --ood-n 36` pipeline.
 - `superpowers/plans/` 5 files (road-map, accurate-map, baseline-nowcaster, sih-demo, sih-inference) + `specs/` 3 files — plan history.
 
-## random_info/ (560 KB external rain + theory)
+## data/raw/rainfall/ (560 KB external rain + theory)
 
 - `daily_rainfall_2016_2026.csv` 127,927 B 3653 rows (date,rainfall,24h,48h,72h,7d) — grounds quotas (max 114.59 p99 ~37).
 - `Ghaziabad_Rainfall_2021_2025.csv` 134,312 B / `ERA5_Land_...` 155,735 B / `GPM_IMERG_...` 130,472 B — 1827 rows each (system:index,date,rainfall,.geo).

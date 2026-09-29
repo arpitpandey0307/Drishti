@@ -12,7 +12,7 @@ See `03_module-deep-dives/05_data-terrain-campus.md`. Runtime readers: `twin.py:
 
 Rev6 16/10/2024 1:400 khasra 277M/278O/280A; plot 68756.00 net 68331.72 coverage 35%→23916.10 FAR 2.0→136663.44 parking 20190/20232.12; A G+2 45×45.70 … Z G+8 26.80; affine 3–5 m UNVERIFIED (`kiet_campuse_data/info.md:1-141`).
 
-## 4. External rainfall (random_info/, 560 KB)
+## 4. External rainfall (data/raw/rainfall/, 560 KB)
 
 `daily_rainfall_2016_2026.csv` 3653 rows (provenance unknown; max 114.59 p99 ~37, 24 d >50 mm) + 3× Ghaziabad 2021–2025 1827 rows (GPM=NASA, ERA5=ECMWF per filenames NOT verified). Used for ranges only, never calibrated (`source.md:111-116`). Plus `urban_drainage_network` theory memo (SWMM/Manning/Rational).
 
