@@ -278,7 +278,7 @@ about 20 MB. Locally, `python -m http.server 8123` serves the same site.
 - **Cost:** open data, open software and a CPU-only forecast loop — no GPU or per-forecast cloud bill.
 - **Policy fit:** supports local early warning under the NDMA urban flooding guidelines, SDG 11.5 and
   the Sendai Framework.
-
+okay
 ## 12. Future scope
 
 - Onboard surveyed drain networks, real gauges and level sensors, and the IMD/MOSDAC radar feed.

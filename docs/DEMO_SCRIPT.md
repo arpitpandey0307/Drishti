@@ -235,8 +235,8 @@ python -m http.server 8123
 #   http://localhost:8123/dashboard/               (operator dashboard)
 ```
 
-Backup: the same pages are hosted at `https://drishti-sand.vercel.app/` and
-`https://drishti-sand.vercel.app/dashboard/`. The 4:51 explainer video is `media/drishti_explainer.mp4`.
+Backup: the same pages are hosted at `https://drishti-indol.vercel.app/` and
+`https://drishti-indol.vercel.app/dashboard/`. The 4:51 explainer video is https://youtu.be/MfLX_qhArzU (local copy: `media/drishti_explainer.mp4`).
 
 ```mermaid
 journey

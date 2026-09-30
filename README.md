@@ -14,11 +14,11 @@ Pilot area: KIET Group of Institutions campus, Ghaziabad (28.7523° N, 77.4985°
 ![Tests](https://img.shields.io/badge/tests-31%20passed%20%C2%B7%201%20skipped-2EA44F)
 ![Data](https://img.shields.io/badge/data-Level--1%20demo%20(synthetic%20drains)-F59E0B)
 
-[**Live dashboard**](https://drishti-sand.vercel.app/dashboard/) ·
-[**3D storm replay**](https://drishti-sand.vercel.app/) ·
-[**Explainer video**](media/drishti_explainer.mp4) ·
+[**Live dashboard**](https://drishti-indol.vercel.app/dashboard/) ·
+[**3D storm replay**](https://drishti-indol.vercel.app/) ·
+[**Explainer video**](https://youtu.be/MfLX_qhArzU) ·
 [**Demo script**](docs/DEMO_SCRIPT.md) ·
-[**SIH deck**](ppt/Drishti_SIH26085.pptx)
+[**SIH deck**](ppt/Drishti_SIH26085.pptx) · [**Project report**](https://drive.google.com/file/d/1bLqAhJ1yFDGzy0g_1u96-R1pBmObEt78/view?usp=sharing)
 
 <img src="docs/images/screenshots/home.jpg" alt="Drishti homepage: a simulated squall replayed in 3D over the real KIET campus terrain, buildings and drain network" width="100%">
 
