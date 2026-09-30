@@ -39,3 +39,14 @@ space/windows/*.bin
 
 # local machine / agent notes
 environment.md
+
+# /brag explainer video: large regenerable media (see brag-output/composition-brief.md to rebuild)
+brag-output/work/sent/
+brag-output/work/snap*/
+brag-output/work/*.wav
+brag-output/work/*.mp4
+brag-output/composition/assets/clips/
+brag-output/composition/assets/audio/
+brag-output/composition/assets/vo/
+brag-output/composition/snapshots/
+brag-output/work/*.jpg

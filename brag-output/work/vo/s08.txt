@@ -1,0 +1,1 @@
+Hotspots maps the chance of exceeding ten, twenty or thirty centimetres, lists an early warning for every hotspot tile, and shows the radar ensemble behind it.

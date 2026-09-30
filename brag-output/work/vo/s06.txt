@@ -1,0 +1,1 @@
+The operations dashboard has eight views. Situation shows the twin as it stands right now: forecast health, rainfall, observation quality, and live alerts.

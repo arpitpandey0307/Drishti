@@ -1,0 +1,1 @@
+Let's see the prototype. The homepage replays a simulated squall over the real campus terrain in three D. Rain falls, drains fill and surcharge, and water rises in the low corners.
