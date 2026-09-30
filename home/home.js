@@ -153,7 +153,7 @@
   let prev = performance.now(), frameCount = 0;
   function tick(now) {
     requestAnimationFrame(tick);
-    const dt = Math.min((now - prev) / 1000, 0.1); prev = now;
+    const dt = Math.max(0, Math.min((now - prev) / 1000, 0.1)); prev = now;
     if (!visible) return;
     if (playing) { f += dt * 1.15; if (f > T - 1) f = 0; }
     const rr = (frameCount++ % 2 === 0 || !playing) ? applyFrame(f) : live.rain_mmh[Math.floor(f)];

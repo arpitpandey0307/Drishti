@@ -1,1 +1,0 @@
-Validation scores every cycle against the reference run. And the system view shows the loop timings, a versioned A P I, Common Alerting Protocol alerts, and role-based access for every kind of user.

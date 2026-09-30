@@ -16,7 +16,7 @@ Pilot area: KIET Group of Institutions campus, Ghaziabad (28.7523° N, 77.4985°
 
 [**Live dashboard**](https://drishti-sand.vercel.app/dashboard/) ·
 [**3D storm replay**](https://drishti-sand.vercel.app/) ·
-[**Explainer video**](brag-output/brag.mp4) ·
+[**Explainer video**](media/drishti_explainer.mp4) ·
 [**Demo script**](docs/DEMO_SCRIPT.md) ·
 [**SIH deck**](ppt/Drishti_SIH26085.pptx)
 
@@ -315,6 +315,19 @@ python -m http.server 8123
 # http://localhost:8123/dashboard/  operator dashboard
 ```
 
+**Deploy to Vercel** (static, no build step — config in `vercel.json` + `.vercelignore`):
+
+```bash
+npm i -g vercel
+vercel          # preview
+vercel --prod   # production
+```
+
+Or import the GitHub repo at vercel.com → *Framework preset: Other*, leave build and output settings
+empty (they come from `vercel.json`). Python code, docs and media are excluded from the upload, so
+Vercel never tries to build `api/*.py` as serverless functions. Routes: `/`, `/dashboard/`,
+`/planner`, `/viewer`.
+
 **Run the models** (Python 3.12+):
 
 ```bash
@@ -359,18 +372,20 @@ Drishti/
 ├── home/, index.html    Landing page with the 3D storm replay
 ├── config/              YAML: terrain, drainage, hydraulics, rainfall, simulation, forecast
 ├── data/                GeoJSON (roads, campus), terrain overlays, raw/rainfall CSVs
-├── kiet_terrain/, kiet_campus_map/   DEM package and campus boundary reconstruction
+├── kiet_terrain/        Authoritative OSM campus boundary
 ├── planner/, outputs/viz-demo/       Pre-computed storms for the planner and viewer
 ├── space/               Hugging Face Space front-end
 ├── tests/               Pytest suite (physics, coupling, forecast, routing, U-Net)
-├── docs/                SRS, TASKS, module docs, DEMO_SCRIPT, knowledge base, images
-├── ppt/                 SIH presentation (Drishti_SIH26085.pptx) + reference template
-└── brag-output/         4:51 explainer video and its source
+├── docs/                SRS, TASKS, module docs, DEMO_SCRIPT, screenshots
+├── ppt/                 SIH presentation (Drishti_SIH26085.pptx)
+├── media/               4:51 explainer video
+├── REPORT.md            Full project report
+└── vercel.json          Static deployment config (+ .vercelignore)
 ```
 
 Deeper docs: [SRS](docs/SRS.md) · [build plan](docs/TASKS.md) · [simulation](docs/simulation.md) ·
 [forecast](docs/forecast.md) · [dashboard](docs/dashboard.md) · [validation](docs/validation.md) ·
-[assumptions](docs/assumptions.md) · [knowledge base](docs/knowledge_base/00_INDEX.md)
+[assumptions](docs/assumptions.md) · [project report](REPORT.md)
 
 ## 8. Data honesty
 
@@ -419,7 +434,6 @@ timeline
 - Ronneberger, O., Fischer, P. & Brox, T. (2015). U-Net: convolutional networks for biomedical image segmentation. *MICCAI*.
 - Evensen, G. (1994). Sequential data assimilation with a nonlinear quasi-geostrophic model using Monte Carlo methods. *JGR* 99(C5).
 - National Disaster Management Authority (2010). *Management of Urban Flooding* — National Disaster Management Guidelines.
-- Full source list with the equations each one informed: [docs/project/source.md](docs/project/source.md).
 
 ---
 

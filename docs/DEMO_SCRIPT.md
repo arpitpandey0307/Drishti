@@ -236,7 +236,7 @@ python -m http.server 8123
 ```
 
 Backup: the same pages are hosted at `https://drishti-sand.vercel.app/` and
-`https://drishti-sand.vercel.app/dashboard/`. The 4:51 explainer video is `brag-output/brag.mp4`.
+`https://drishti-sand.vercel.app/dashboard/`. The 4:51 explainer video is `media/drishti_explainer.mp4`.
 
 ```mermaid
 journey
@@ -705,7 +705,7 @@ flowchart TD
     E -- "no" --> G["Switch map to Chart mode<br/>(2D/3D and Sat toggles top-left)"]
     F & G --> H{Browser WebGL OK?}
     H -- "yes" --> I[Live demo]
-    H -- "no" --> J["Play brag-output/brag.mp4<br/>then use screenshots in this doc"]
+    H -- "no" --> J["Play media/drishti_explainer.mp4<br/>then use screenshots in this doc"]
 ```
 
 - [ ] `python -m http.server 8123` running from the repo root
@@ -713,7 +713,7 @@ flowchart TD
 - [ ] Forecast issued = **T+115 min**; Radar outage drill **off**; role = Flood Control Operator
 - [ ] Deep links ready: `dashboard/#forecast&lead=6`, `#prob`, `#drain`, `#impact`,
       `#actions&scen=pump_failure&diff=1`, `#live&drill=1`, `#valid`
-- [ ] `brag-output/brag.mp4` downloaded locally
+- [ ] `media/drishti_explainer.mp4` downloaded locally
 - [ ] Deck `ppt/Drishti_SIH26085.pptx` open in presenter view (speaker notes on)
 
 ---

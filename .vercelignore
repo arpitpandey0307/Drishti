@@ -1,2 +1,27 @@
-# never referenced by any page (re-downloadable from AWS per report.md) — keep deploys small
-kiet_terrain/data/terrain/raw/
+# Drishti deploys as a static site. Everything below is Python / docs / media that the
+# web pages never load. Excluding api/ and requirements.txt stops Vercel from trying to
+# build the Python routing module as a serverless function (and installing torch).
+api/
+requirements.txt
+pytest.ini
+render.yaml
+simulation/
+forecast/
+dataset/
+models/
+tools/
+tests/
+config/
+visualization/
+space/
+kiet_terrain/osm_kiet_full.json
+data/raw/
+docs/
+ppt/
+media/
+README.md
+REPORT.md
+*.py
+*.pyc
+__pycache__/
+.pytest_cache/

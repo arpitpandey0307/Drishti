@@ -1,1 +1,0 @@
-Forecast plays the depth map from now to three hours ahead. Switch between the expected depth, P ten, P fifty, P ninety, and the peak. Click any street cell, and Drishti forecasts that exact spot: all twenty members, when the threshold is crossed, and a why panel that weighs rainfall, runoff, terrain, drainage and asset faults, to name the main driver.

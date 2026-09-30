@@ -1,1 +1,0 @@
-Introducing Drishti: know where the water will stand, three hours before it does. Our SIH 2026 prototype for PS-26085 forecasts flood depth street by street across the KIET campus, and tells operators how sure it is, why, and what to do about it.

@@ -1,1 +1,0 @@
-Roads and routes turns depth into impact. Every road is scored for two-wheelers, cars, buses, ambulances and fire trucks. The planner finds three routes that avoid the streets that will be flooded by the time you reach them, and checks access to every building.
